@@ -48,7 +48,7 @@ namespace BookProject.Controllers
             {
                 return BadRequest();
             }
-
+            var test = 213;
             var newArticle = await _articleService.AddAsync(article);
 
             return Ok(newArticle);
