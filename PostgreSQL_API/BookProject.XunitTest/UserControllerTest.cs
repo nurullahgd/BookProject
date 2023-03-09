@@ -8,6 +8,8 @@ using Moq;
 using System;
 using System.Net;
 using Xunit;
+using AutoMapper;
+using BookProject.Application.Mapper;
 namespace BookProject.XunitTest
 {
     public class UserControllerTest
@@ -15,11 +17,14 @@ namespace BookProject.XunitTest
         private Mock<IUserRepository> _mock;
         private readonly UserService _userService;
         private readonly UserController _userController;
+        IMapper mapper = BookProjectMapper.Mapper;
+
         public UserControllerTest()
         {
             _mock = new Mock<IUserRepository>();
             _userService = new UserService(_mock.Object);
             _userController = new UserController(_userService);
+           
         }
 
         [Fact]
@@ -33,8 +38,8 @@ namespace BookProject.XunitTest
 
             // Assert
             Assert.IsType<OkObjectResult>(okObjectResult);
-            var user = Assert.IsType<User>(okObjectResult.Value);
-            Assert.Equal(1, user.Id);
+            var user = Assert.IsType<UserResponse>(okObjectResult.Value);
+            Assert.Equal("test", user.FirstName);
 
         }
         [Fact]
@@ -79,38 +84,31 @@ namespace BookProject.XunitTest
         public void Create_Return_Correctly()
         {
             // Arrange
-            
-            User added = new User() { Id = 2, FirstName = "addtest", LastName = "addtest",Email="testmail"};
-            _mock.Setup(y => y.AddAsync(added).Result).Returns(added);   
+            var userToCreate = FakeData();
+            _mock.Setup(y => y.AddAsync(userToCreate).Result).Returns(userToCreate);
             // Act
-            var actionResult = _userController.Create(added);
+            var actionResult = _userController.Create(mapper.Map<UserModel>(userToCreate));
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
-            
             Assert.IsType<OkObjectResult>(okObjectResult);
-
         }
         [Fact]
         public void Update_Return_Correctly()
         {
-            
-            // Arrange
-            var userToUpdate = FakeData();
-            userToUpdate.FirstName = "New Name Test";
+            //Arrange
+            var updateToUpdate = FakeData();
+            updateToUpdate.FirstName = "This is updated FirstName";
             _mock.Setup(y => y.GetByIdAsync(1)).ReturnsAsync(FakeData());
-            _mock.Setup(y => y.UpdateAsync(userToUpdate)).ReturnsAsync(userToUpdate);
+            _mock.Setup(y => y.UpdateAsync(updateToUpdate)).ReturnsAsync(updateToUpdate);
+            UserModel updatedUserModel = new UserModel { Id = 1, FirstName = "This is updated FirstName" };
 
             // Act
-            var actionResult =  _userController.Update(1, userToUpdate);
+            var actionResult = _userController.Update(1, updatedUserModel);
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(okObjectResult);
-            //var user = Assert.IsType<User>(okObjectResult.Value);
-            //Assert.Equal(userToUpdate.Id, user.Id);
-            //Assert.Equal(userToUpdate.FirstName, user.FirstName);
-
         }
         [Fact]
         public void Delete_Return_Correctly()

@@ -3,6 +3,9 @@ using BookProject.Data.Entities;
 using BookProject.Application.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using BookProject.Application.Models;
+using BookProject.Application.Mapper;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,7 +16,7 @@ namespace BookProject.Controllers
     public class MagazineController : ControllerBase
     {
         private readonly IMagazineService _magazineService;
-
+        IMapper mapper = BookProjectMapper.Mapper;
         public MagazineController(IMagazineService magazineservice)
         {
             _magazineService = magazineservice;
@@ -32,7 +35,8 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
-            return Ok(magazine);
+            var magazineModel = mapper.Map<MagazineResponse>(magazine);
+            return Ok(magazineModel);
         }
 
         [HttpGet]
@@ -43,8 +47,12 @@ namespace BookProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Magazine magazine)
+        public async Task<IActionResult> Create(MagazineModel magazine)
         {
+            if(magazine==null)
+            {
+                return BadRequest("Magazine information is missing");
+            }
             if(!ModelState.IsValid)
             {
                 return BadRequest("Please fill in the fields correctly.");
@@ -56,7 +64,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Magazine magazine)
+        public async Task<IActionResult> Update(int id, MagazineModel magazine)
         {
             if(!ModelState.IsValid)
             {
@@ -68,10 +76,13 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
-            existingMagazine.Name=magazine.Name;
-            existingMagazine.Articles = magazine.Articles;
 
-            var updatedMagazine = await _magazineService.UpdateAsync(existingMagazine);
+            var updatedMagazineModel = new MagazineModel
+            {
+                Id = existingMagazine.Id,
+                Name = magazine.Name
+            };
+            var updatedMagazine = await _magazineService.UpdateAsync(updatedMagazineModel);
 
             return Ok(updatedMagazine);
         }

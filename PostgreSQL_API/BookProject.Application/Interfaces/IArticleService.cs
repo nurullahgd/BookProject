@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookProject.Application.Models;
 using BookProject.Data.Entities;
+using BookProject.Data.Models;
 
 namespace BookProject.Application.Interfaces
 {
@@ -15,8 +17,9 @@ namespace BookProject.Application.Interfaces
 
         Task<Article> GetByIdAsync(int id);
         Task<IEnumerable<Article>> GetAllAsync();
-        Task<Article> AddAsync(Article article);
-        Task<Article> UpdateAsync(Article article);
+        Task<Article> AddAsync(ArticleModel article);
+        Task<Article> UpdateAsync(ArticleModel article);
         Task<Article> DeleteAsync(int id);
+        IQueryable<ArticleJoinModel> GetArticleJoinModels();
     }
 }

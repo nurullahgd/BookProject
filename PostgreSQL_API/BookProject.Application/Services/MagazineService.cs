@@ -8,6 +8,7 @@ using BookProject.Data.Repositories;
 using BookProject.Application.Services;
 using BookProject.Data;
 using BookProject.Data.Entities;
+using BookProject.Application.Models;
 
 namespace BookProject.Application.Services
 {
@@ -30,13 +31,29 @@ namespace BookProject.Application.Services
             return await _magazineRepository.GetAllAsync();
         }
 
-        public async Task<Magazine> AddAsync(Magazine magazine)
+        public async Task<Magazine> AddAsync(MagazineModel magazineModel)
         {
+            var magazine = new Magazine
+            {
+                Id = magazineModel.Id,
+                Name = magazineModel.Name
+            };
             return await _magazineRepository.AddAsync(magazine);
+
         }
 
-        public async Task<Magazine> UpdateAsync(Magazine magazine)
+        public async Task<Magazine> UpdateAsync(MagazineModel magazineModel)
         {
+            var magazine = await _magazineRepository.GetByIdAsync(magazineModel.Id);
+
+            if(magazine == null)
+            {
+                // Kullanıcı bulunamadı
+                return null;
+            }
+            magazine.Name = magazineModel.Name ?? magazine.Name;
+
+            
             return await _magazineRepository.UpdateAsync(magazine);
         }
 

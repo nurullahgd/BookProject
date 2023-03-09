@@ -8,6 +8,8 @@ using Moq;
 using System;
 using System.Net;
 using Xunit;
+using AutoMapper;
+using BookProject.Application.Mapper;
 
 namespace BookProject.XunitTest
 {
@@ -16,11 +18,14 @@ namespace BookProject.XunitTest
         private Mock<IMagazineRepository> _mock;
         private readonly MagazineService _magazineService;
         private readonly MagazineController _magazineController;
+        IMapper mapper = BookProjectMapper.Mapper;
+
         public MagazineControllerTest()
         {
             _mock = new Mock<IMagazineRepository>();
             _magazineService = new MagazineService(_mock.Object);
             _magazineController = new MagazineController(_magazineService);
+            
         }
         [Fact]
         public void Get_Returns_Correct_Id()
@@ -33,8 +38,8 @@ namespace BookProject.XunitTest
 
             // Assert
             Assert.IsType<OkObjectResult>(okObjectResult);
-            var magazine = Assert.IsType<Magazine>(okObjectResult.Value);
-            Assert.Equal(1, magazine.Id);
+            var magazine = Assert.IsType<MagazineResponse>(okObjectResult.Value);
+            Assert.Equal("test", magazine.Name);
 
         }
         [Fact]
@@ -78,15 +83,14 @@ namespace BookProject.XunitTest
         public void Create_Return_Correctly()
         {
             // Arrange
-
-            Magazine added = new Magazine() { Id = 4, Name="test" };
-            _mock.Setup(y => y.AddAsync(added).Result).Returns(added);
+            var magazineToCreate = FakeData();
+            Magazine addedMagazine = mapper.Map<Magazine>(magazineToCreate);
+            _mock.Setup(y => y.AddAsync(addedMagazine).Result).Returns(addedMagazine);
             // Act
-            var actionResult = _magazineController.Create(added);
+            var actionResult = _magazineController.Create(mapper.Map<MagazineModel>(addedMagazine));
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
-
             Assert.IsType<OkObjectResult>(okObjectResult);
 
         }
@@ -96,12 +100,13 @@ namespace BookProject.XunitTest
 
             // Arrange
             var magazineToUpdate = FakeData();
-            magazineToUpdate.Name = "New Magazine Nme Test";
+            magazineToUpdate.Name = "This is updated Name";
             _mock.Setup(y => y.GetByIdAsync(1)).ReturnsAsync(FakeData());
             _mock.Setup(y => y.UpdateAsync(magazineToUpdate)).ReturnsAsync(magazineToUpdate);
+            MagazineModel updatedMagazineModel = new MagazineModel { Id = 1, Name = "This is updated Name" };
 
             // Act
-            var actionResult = _magazineController.Update(1, magazineToUpdate);
+            var actionResult = _magazineController.Update(1, updatedMagazineModel);
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert

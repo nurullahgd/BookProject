@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BookProject.Application.Models;
 using BookProject.Data.Entities;
 
 namespace BookProject.Application.Interfaces
@@ -11,8 +12,8 @@ namespace BookProject.Application.Interfaces
     {
         Task<Magazine> GetByIdAsync(int id);
         Task<IEnumerable<Magazine>> GetAllAsync();
-        Task<Magazine> AddAsync(Magazine user);
-        Task<Magazine> UpdateAsync(Magazine user);
+        Task<Magazine> AddAsync(MagazineModel magazine);
+        Task<Magazine> UpdateAsync(MagazineModel magazine);
         Task<Magazine> DeleteAsync(int id);
     }
 }

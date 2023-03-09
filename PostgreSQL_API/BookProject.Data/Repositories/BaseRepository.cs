@@ -11,7 +11,7 @@ namespace BookProject.Data.Repositories
 {
     public class BaseRepository<T> : IRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        public readonly DbContext _context;
 
         public BaseRepository(DbContext context)
         {
@@ -27,7 +27,7 @@ namespace BookProject.Data.Repositories
         {
             return await _context.Set<T>().ToListAsync();
         }
-
+        
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
@@ -41,7 +41,7 @@ namespace BookProject.Data.Repositories
             await _context.SaveChangesAsync();
             return entity;
         }
-
+        
         public async Task<T> DeleteAsync(int id)
         {
             var entity = await _context.Set<T>().FindAsync(id);

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BookProject.Data
 {
-    public  class PostgreSqlExampleDbContext : DbContext
+    public class PostgreSqlExampleDbContext : DbContext
     {
         public PostgreSqlExampleDbContext(DbContextOptions<PostgreSqlExampleDbContext> options)
             : base(options)
@@ -32,19 +32,6 @@ namespace BookProject.Data
                 .WithMany(u => u.Articles)
                 .HasForeignKey(a => a.AuthorId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
-        protected readonly IConfiguration Configuration;
-
-        //private const string CONNECTION_STRING = "Host=localhost;" +
-        //"Port=5432;" +
-        //"Username=postgres;" +
-        //"Password=1234;" +
-        //"Database=PostgreSqlExample";
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<PostgreSqlExampleDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         public DbSet<Article> Articles { get; set; }

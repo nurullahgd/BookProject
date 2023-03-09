@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using BookProject.Data.Repositories;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Services;
+using AutoMapper;
 
 namespace BookProject
 {
@@ -33,6 +34,7 @@ namespace BookProject
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMagazineRepository, MagazineRepository>();
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
 
             services.AddSwaggerGen(c =>

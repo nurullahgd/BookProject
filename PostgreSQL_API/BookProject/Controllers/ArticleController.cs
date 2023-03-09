@@ -2,6 +2,11 @@
 using BookProject.Data.Entities;
 using BookProject.Application.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using BookProject.Application.Models;
+using BookProject.Data.Models;
+using AutoMapper;
+using BookProject.Application.Mapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,7 +17,7 @@ namespace BookProject.Controllers
     public class ArticleController : ControllerBase
     {
         private readonly IArticleService _articleService;
-
+        IMapper mapper = BookProjectMapper.Mapper;
         public ArticleController(IArticleService articleService)
         {
             _articleService = articleService;
@@ -31,19 +36,24 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
-            return Ok(article);
+            var articleModel = mapper.Map<ArticleResponse>(article); 
+            return Ok(articleModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var articles = await _articleService.GetAllAsync();
+            var articles =  _articleService.GetArticleJoinModels();
             return Ok(articles);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Article article)
+        public async Task<IActionResult> Create(ArticleModel article)
         {
+            if(article==null)
+            {
+                return BadRequest("Article information is missing");
+            }
             if(!ModelState.IsValid)
             {
                 return BadRequest();
@@ -55,7 +65,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Article article)
+        public async Task<IActionResult> Update(int id, ArticleModel article)
         {
             if(!ModelState.IsValid)
             {
@@ -67,11 +77,16 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
+            var updatedArticleModel = new ArticleModel
+            {
+                id = existingArticle.id,
+                Title = article.Title,
+                Content=article.Content,
+                AuthorId=article.AuthorId,
+                MagazineId=article.MagazineId
+            };
 
-            existingArticle.Title = article.Title;
-            //existingArticle.Description = article.Description;
-
-            var updatedArticle = await _articleService.UpdateAsync(existingArticle);
+            var updatedArticle = await _articleService.UpdateAsync(updatedArticleModel);
 
             return Ok(updatedArticle);
         }
@@ -89,5 +104,6 @@ namespace BookProject.Controllers
 
             return Ok("Deleted");
         }
+       
     }
 }

@@ -16,8 +16,9 @@ namespace BookProject.Application.Interfaces
 
         Task<User> GetByIdAsync(int id);
         Task<IEnumerable<User>> GetAllAsync();
-        Task<User> AddAsync(User article);
-        Task<User> UpdateAsync(User article);
+        Task<User> AddAsync(UserModel user);
+        Task<User> UpdateAsync(UserModel user);
         Task<User> DeleteAsync(int id);
+
     }
 }

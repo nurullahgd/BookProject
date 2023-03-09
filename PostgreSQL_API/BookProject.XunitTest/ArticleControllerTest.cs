@@ -1,4 +1,6 @@
-﻿using BookProject.Application.Models;
+﻿using AutoMapper;
+using BookProject.Application.Mapper;
+using BookProject.Application.Models;
 using BookProject.Application.Services;
 using BookProject.Controllers;
 using BookProject.Data.Entities;
@@ -16,6 +18,7 @@ namespace BookProject.XunitTest
         private Mock<IArticleRepository> _mock;
         private readonly ArticleService _articleService;
         private readonly ArticleController _articleController;
+        IMapper mapper = BookProjectMapper.Mapper;
         public ArticleControllerTest()
         {
             _mock = new Mock<IArticleRepository>();
@@ -26,6 +29,7 @@ namespace BookProject.XunitTest
         public void Get_Returns_Correct_Id()
         {
             // Arrange
+            var articleToGet = FakeData();
             _mock.Setup(y => y.GetByIdAsync(1)).ReturnsAsync(FakeData());
             // Act
             var actionResult = _articleController.Get(1);
@@ -33,8 +37,8 @@ namespace BookProject.XunitTest
 
             // Assert
             Assert.IsType<OkObjectResult>(okObjectResult);
-            var article = Assert.IsType<Article>(okObjectResult.Value);
-            Assert.Equal(1, article.id);
+            var article = Assert.IsType<ArticleResponse>(okObjectResult.Value);
+            Assert.Equal("test", article.Title);
 
         }
         [Fact]
@@ -78,11 +82,10 @@ namespace BookProject.XunitTest
         public void Create_Return_Correctly()
         {
             // Arrange
-
-            Article added = new Article() { id=4,Content="test" };
+            var added = FakeData();
             _mock.Setup(y => y.AddAsync(added).Result).Returns(added);
             // Act
-            var actionResult = _articleController.Create(added);
+            var actionResult = _articleController.Create(mapper.Map<ArticleModel>(added));
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
@@ -90,25 +93,25 @@ namespace BookProject.XunitTest
             Assert.IsType<OkObjectResult>(okObjectResult);
 
         }
+
         [Fact]
         public void Update_Return_Correctly()
         {
 
             // Arrange
-            var userToUpdate = FakeData();
-            userToUpdate.Content = "New Content Test";
+            var articleToUpdate = FakeData();
+            articleToUpdate.Content = "This is updated Content";
             _mock.Setup(y => y.GetByIdAsync(1)).ReturnsAsync(FakeData());
-            _mock.Setup(y => y.UpdateAsync(userToUpdate)).ReturnsAsync(userToUpdate);
+            _mock.Setup(y => y.UpdateAsync(articleToUpdate)).ReturnsAsync(articleToUpdate);
+            ArticleModel updatedArticleModel = new ArticleModel { id = 1, Content = "This is updated Content" };
 
             // Act
-            var actionResult = _articleController.Update(1, userToUpdate);
+            var actionResult = _articleController.Update(1, updatedArticleModel);
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
             Assert.IsType<OkObjectResult>(okObjectResult);
-            //var user = Assert.IsType<User>(okObjectResult.Value);
-            //Assert.Equal(userToUpdate.Id, user.Id);
-            //Assert.Equal(userToUpdate.FirstName, user.FirstName);
+
 
         }
         [Fact]

@@ -4,6 +4,8 @@ using BookProject.Application.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using BookProject.Application.Models;
+using AutoMapper;
+using BookProject.Application.Mapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +15,7 @@ namespace BookProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        IMapper mapper = BookProjectMapper.Mapper;
 
         private readonly IUserService _userService;
 
@@ -33,7 +36,8 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            var userModel = mapper.Map<UserResponse>(user);
+            return Ok(userModel);
         }
 
         [HttpGet]
@@ -44,37 +48,26 @@ namespace BookProject.Controllers
         }
 
         [HttpPost]
-        //public async Task<IActionResult> Create([FromBody] UserModel user)
-        //{
-        //    if(user == null)
-        //    {
-        //        return BadRequest("User information is missing.");
-        //    }
-
-        //    if(!ModelState.IsValid)
-        //    {
-        //        return BadRequest("Please fill in the fields correctly.");
-        //    }
-
-        //    var newUser = await _userService.AddAsync(user);
-
-        //    return Ok(newUser);
-        //}
-        public async Task<IActionResult> Create([FromBody] User  user)
+        public async Task<IActionResult> Create(UserModel user)
         {
+            if(user == null)
+            {
+                return BadRequest("User information is missing.");
+            }
+
             if(!ModelState.IsValid)
             {
-                return NotFound();
+                return BadRequest("Please fill in the fields correctly.");
             }
 
             var newUser = await _userService.AddAsync(user);
 
-            //return CreatedAtAction(nameof(Get), new { id = newUser.Id}, newUser);
             return Ok(newUser);
         }
+        
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] User user)
+        public async Task<IActionResult> Update(int id, UserModel user)
         {
             if(!ModelState.IsValid)
             {
@@ -87,11 +80,15 @@ namespace BookProject.Controllers
                 return NotFound();
             }
 
-            existingUser.FirstName = user.FirstName;
-            existingUser.LastName = user.LastName;
-            existingUser.Email = user.Email;
+            var updatedUserModel = new UserModel
+            {
+                Id = existingUser.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
+            };
 
-            var updatedUser = await _userService.UpdateAsync(existingUser);
+            var updatedUser = await _userService.UpdateAsync(updatedUserModel);
 
             return Ok(updatedUser);
         }
