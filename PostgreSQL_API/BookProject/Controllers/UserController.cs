@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BookProject.Data.Entities;
 using BookProject.Application.Interfaces;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;

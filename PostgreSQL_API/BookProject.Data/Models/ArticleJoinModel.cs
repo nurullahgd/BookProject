@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace BookProject.Data.Models
+﻿namespace BookProject.Data.Models
 {
     public class ArticleJoinModel
     {

@@ -5,7 +5,6 @@ using BookProject.Data.Entities;
 using BookProject.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Net;
 using Xunit;
 using AutoMapper;

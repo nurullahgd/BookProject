@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BookProject.Data.Entities;
 using BookProject.Application.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using BookProject.Application.Models;
-using BookProject.Data.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-using BookProject.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,29 +36,30 @@ namespace BookProject.Controllers
             {
                 return NotFound();
             }
-            var articleModel = mapper.Map<ArticleResponse>(article); 
+            var articleModel = mapper.Map<ArticleModel>(article); 
             return Ok(articleModel);
         }
+        //[HttpGet]
+        //public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazine()
+        //{
+        //    var articles =  _articleService.GetArticleWithUserAndMagazine();
+        //    var response = mapper.Map<List<ArticleResponse>>(articles);
+        //    return Ok(response);
+        //}
         [HttpGet]
-        public async Task<ActionResult<List<ArticleTestResponse>>> GetArticleWithUserAndMagazine()
-        {
-            var articles =  _articleService.GetArticleWithUserAndMagazine();
-            var response = mapper.Map<List<ArticleTestResponse>>(articles);
-            return Ok(response);
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<ArticleTestResponse>>> GetArticleWithUserAndMagazineJustName()
+        public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazineJustName()
         {
             var articles = _articleService.GetArticleWithUserAndMagazine();
-            var response = mapper.Map<List<ArticleTestResponseJustName>>(articles);
+            var response = mapper.Map<List<ArticleResonseNames>>(articles);
             return Ok(response);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var articles = await _articleService.GetAllAsync();
-            return Ok(articles);
+            var articles =  _articleService.GetArticleWithUserAndMagazine();
+            var response = mapper.Map<List<ArticleResponse>>(articles);
+            return Ok(response);
 
         }
 

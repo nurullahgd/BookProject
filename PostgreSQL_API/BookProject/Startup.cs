@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using BookProject.Data.Repositories;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Services;
-using AutoMapper;
 using FluentValidation;
 
 namespace BookProject

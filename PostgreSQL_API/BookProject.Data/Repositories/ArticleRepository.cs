@@ -1,9 +1,7 @@
 ﻿using BookProject.Data.Entities;
-using System.Collections.Generic;
 using System.Linq;
 using BookProject.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace BookProject.Data.Repositories
 {

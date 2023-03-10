@@ -41,14 +41,7 @@ namespace BookProject.Application.Services
         {
             return await _articleRepository.GetAllAsync();
         }
-        //public IQueryable<ArticleJoinModel> GetArticleJoinModels()
-        //{
-        //    return _articleRepository.GetArticleJoinModels();
-        //}
-        //public IQueryable<AllArticleJoinModel> GetAllArticleJoinModels()
-        //{
-        //    return _articleRepository.GetAllArticleJoinModels();
-        //}
+        
 
         public async Task<Article> AddAsync(ArticleModel articleModel)
         {
@@ -93,11 +86,6 @@ namespace BookProject.Application.Services
             {
                 article.MagazineId = article.MagazineId;
             }
-
-            //article.AuthorId = articleModel.AuthorId ?? article.AuthorId;
-            //article.MagazineId = articleModel.MagazineId ?? article.MagazineId;
-
-
 
             return await _articleRepository.UpdateAsync(article);
         }

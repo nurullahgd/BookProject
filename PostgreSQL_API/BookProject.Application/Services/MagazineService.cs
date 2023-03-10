@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookProject.Application.Interfaces;
 using BookProject.Data.Repositories;
-using BookProject.Application.Services;
-using BookProject.Data;
 using BookProject.Data.Entities;
 using BookProject.Application.Models;
 

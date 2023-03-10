@@ -7,13 +7,12 @@ using BookProject.Data.Entities;
 using BookProject.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Net;
 using Xunit;
 
 namespace BookProject.XunitTest
 {
-   public class ArticleControllerTest
+    public class ArticleControllerTest
     {
         private Mock<IArticleRepository> _mock;
         private readonly ArticleService _articleService;

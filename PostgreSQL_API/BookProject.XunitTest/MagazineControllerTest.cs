@@ -5,7 +5,6 @@ using BookProject.Data.Entities;
 using BookProject.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Net;
 using Xunit;
 using AutoMapper;
@@ -13,7 +12,7 @@ using BookProject.Application.Mapper;
 
 namespace BookProject.XunitTest
 {
-   public class MagazineControllerTest
+    public class MagazineControllerTest
     {
         private Mock<IMagazineRepository> _mock;
         private readonly MagazineService _magazineService;

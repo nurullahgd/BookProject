@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using BookProject.Data.Entities;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BookProject.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookProject.Data.Configuration

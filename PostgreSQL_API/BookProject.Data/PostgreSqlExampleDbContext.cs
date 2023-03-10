@@ -1,13 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.Extensions.Configuration;
 using BookProject.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BookProject.Data
 {

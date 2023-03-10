@@ -1,13 +1,9 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BookProject.Application.Interfaces;
 using BookProject.Data.Repositories;
-using BookProject.Application.Services;
-using BookProject.Data;
 using BookProject.Data.Entities;
 using System.Collections.Generic;
 using BookProject.Application.Models;
-using System.Linq;
 
 namespace BookProject.Application.Services
 {
