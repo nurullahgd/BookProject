@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
+using BookProject.Application.Validation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,12 +15,13 @@ namespace BookProject.Controllers
     public class UserController : ControllerBase
     {
         IMapper mapper = BookProjectMapper.Mapper;
-
         private readonly IUserService _userService;
+        private readonly UserValidator _userValidator;
 
         public UserController(IUserService userservice)
         {
             _userService = userservice;
+            _userValidator = new UserValidator(_userService);
         }
 
         [HttpGet("{id}")]
@@ -54,16 +56,17 @@ namespace BookProject.Controllers
                 return BadRequest("User information is missing.");
             }
 
-            if(!ModelState.IsValid)
+            var validationResult = await _userValidator.ValidateAsync(user);
+            if(!validationResult.IsValid)
             {
-                return BadRequest("Please fill in the fields correctly.");
+                return BadRequest(validationResult.Errors);
             }
 
             var newUser = await _userService.AddAsync(user);
 
             return Ok(newUser);
         }
-        
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UserModel user)
