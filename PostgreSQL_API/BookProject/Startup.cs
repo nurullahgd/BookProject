@@ -10,6 +10,7 @@ using BookProject.Data.Repositories;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Services;
 using AutoMapper;
+using FluentValidation;
 
 namespace BookProject
 {
@@ -35,6 +36,7 @@ namespace BookProject
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMagazineRepository, MagazineRepository>();
             services.AddAutoMapper(typeof(Startup));
+            //services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
 
             services.AddSwaggerGen(c =>

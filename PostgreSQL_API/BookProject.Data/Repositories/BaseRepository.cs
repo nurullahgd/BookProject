@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookProject.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using BookProject.Data.Models;
 
 namespace BookProject.Data.Repositories
 {
@@ -22,6 +23,26 @@ namespace BookProject.Data.Repositories
         {
             return await _context.Set<T>().FindAsync(id);
         }
+        public IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine()
+        {
+            var articles = _context.Set<Article>()
+        .Include(a => a.Magazine)
+        .Include(a => a.Author)
+        .Select(a => new ArticleJoinModel
+        {
+            id = a.id,
+            Title = a.Title,
+            Content = a.Content,
+            MagazineId = a.MagazineId,
+            MagazineName = a.Magazine.Name,
+            AuthorId = a.AuthorId,
+            AuthorName = a.Author.FirstName + " " + a.Author.LastName
+        });
+
+            return articles;
+        }
+
+
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {

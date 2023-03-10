@@ -10,16 +10,26 @@ using BookProject.Data;
 using BookProject.Data.Entities;
 using BookProject.Application.Models;
 using BookProject.Data.Models;
+using AutoMapper;
 
 namespace BookProject.Application.Services
 {
     public class ArticleService : IArticleService
     {
         private readonly IArticleRepository _articleRepository;
+        private readonly IMapper _mapper;
 
-        public ArticleService(IArticleRepository articleRepository)
+
+        public ArticleService(IArticleRepository articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
+            _mapper = mapper;
+        }
+
+        public IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine()
+        {
+                return _articleRepository.GetArticleWithUserAndMagazine();
+            
         }
 
         public async Task<Article> GetByIdAsync(int id)
@@ -31,20 +41,24 @@ namespace BookProject.Application.Services
         {
             return await _articleRepository.GetAllAsync();
         }
-        public IQueryable<ArticleJoinModel> GetArticleJoinModels()
-        {
-            return _articleRepository.GetArticleJoinModels();
-        }
+        //public IQueryable<ArticleJoinModel> GetArticleJoinModels()
+        //{
+        //    return _articleRepository.GetArticleJoinModels();
+        //}
+        //public IQueryable<AllArticleJoinModel> GetAllArticleJoinModels()
+        //{
+        //    return _articleRepository.GetAllArticleJoinModels();
+        //}
 
         public async Task<Article> AddAsync(ArticleModel articleModel)
         {
             var article = new Article
             {
                 id = articleModel.id,
-                Title= articleModel.Title,
-                Content= articleModel.Content,
-                AuthorId= articleModel.AuthorId,
-                MagazineId= articleModel.MagazineId
+                Title = articleModel.Title,
+                Content = articleModel.Content,
+                AuthorId = articleModel.AuthorId,
+                MagazineId = articleModel.MagazineId
             };
 
             return await _articleRepository.AddAsync(article);
@@ -87,7 +101,7 @@ namespace BookProject.Application.Services
 
             return await _articleRepository.UpdateAsync(article);
         }
-        
+
         public async Task<Article> DeleteAsync(int id)
         {
             return await _articleRepository.DeleteAsync(id);

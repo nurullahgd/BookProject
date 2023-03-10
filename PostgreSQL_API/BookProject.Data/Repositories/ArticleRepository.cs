@@ -1,10 +1,9 @@
 ﻿using BookProject.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using BookProject.Data.Models;
-using System;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace BookProject.Data.Repositories
 {
@@ -17,25 +16,27 @@ namespace BookProject.Data.Repositories
             _context = context;
         }
 
-        public IQueryable<ArticleJoinModel> GetArticleJoinModels()
+        public IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine()
         {
-            var result = from article in _context.Articles
-                         join magazine in _context.Magazines on article.MagazineId equals magazine.Id
-                         join user in _context.Users on article.AuthorId equals user.Id
-                         select new ArticleJoinModel
-                         {
-                             id = article.id,
-                             Title = article.Title,
-                             Content = article.Content,
-                             MagazineName = magazine.Name,
-                             AuthorName = user.FirstName + " " + user.LastName
-                         };
+            var result = _context.Articles
+                 .Include(a => a.Magazine)
+                 .Include(a => a.Author)
+                 .Select(a => new ArticleJoinModel
+                 {
+                     id = a.id,
+                     Title = a.Title,
+                     Content = a.Content,
+                     MagazineId = a.MagazineId,
+                     MagazineName = a.Magazine.Name,
+                     AuthorId=a.AuthorId,
+                     AuthorName = a.Author.FirstName + " " + a.Author.LastName
+                 }); ;
             return result;
         }
     }
 
     public interface IArticleRepository : IRepository<Article>
     {
-        IQueryable<ArticleJoinModel> GetArticleJoinModels();
+        IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine();
     }
 }

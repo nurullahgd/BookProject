@@ -22,7 +22,7 @@ namespace BookProject.XunitTest
         public ArticleControllerTest()
         {
             _mock = new Mock<IArticleRepository>();
-            _articleService = new ArticleService(_mock.Object);
+            _articleService = new ArticleService(_mock.Object, mapper);
             _articleController = new ArticleController(_articleService);
         }
         [Fact]

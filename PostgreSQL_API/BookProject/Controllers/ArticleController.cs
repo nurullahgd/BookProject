@@ -7,6 +7,7 @@ using BookProject.Application.Models;
 using BookProject.Data.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
+using BookProject.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,10 +17,12 @@ namespace BookProject.Controllers
     [ApiController]
     public class ArticleController : ControllerBase
     {
+        
         private readonly IArticleService _articleService;
         IMapper mapper = BookProjectMapper.Mapper;
         public ArticleController(IArticleService articleService)
         {
+            
             _articleService = articleService;
         }
 
@@ -39,12 +42,27 @@ namespace BookProject.Controllers
             var articleModel = mapper.Map<ArticleResponse>(article); 
             return Ok(articleModel);
         }
+        [HttpGet]
+        public async Task<ActionResult<List<ArticleTestResponse>>> GetArticleWithUserAndMagazine()
+        {
+            var articles =  _articleService.GetArticleWithUserAndMagazine();
+            var response = mapper.Map<List<ArticleTestResponse>>(articles);
+            return Ok(response);
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<ArticleTestResponse>>> GetArticleWithUserAndMagazineJustName()
+        {
+            var articles = _articleService.GetArticleWithUserAndMagazine();
+            var response = mapper.Map<List<ArticleTestResponseJustName>>(articles);
+            return Ok(response);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var articles =  _articleService.GetArticleJoinModels();
+            var articles = await _articleService.GetAllAsync();
             return Ok(articles);
+
         }
 
         [HttpPost]

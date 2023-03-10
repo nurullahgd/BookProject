@@ -7,6 +7,7 @@ using BookProject.Data;
 using BookProject.Data.Entities;
 using System.Collections.Generic;
 using BookProject.Application.Models;
+using System.Linq;
 
 namespace BookProject.Application.Services
 {
@@ -27,6 +28,7 @@ namespace BookProject.Application.Services
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _userRepository.GetAllAsync();
+            
         }
 
         public async Task<User> AddAsync(UserModel userModel)

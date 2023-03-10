@@ -43,8 +43,9 @@ namespace BookProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var users = await _userService.GetAllAsync();
-            return Ok(users);
+            var user = await _userService.GetAllAsync();
+            return Ok(user);
+
         }
 
         [HttpPost]
