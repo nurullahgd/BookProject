@@ -8,6 +8,7 @@ using BookProject.Data.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
 using BookProject.Data;
+using BookProject.Application.Validation;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,13 +18,17 @@ namespace BookProject.Controllers
     [ApiController]
     public class ArticleController : ControllerBase
     {
-        
-        private readonly IArticleService _articleService;
         IMapper mapper = BookProjectMapper.Mapper;
-        public ArticleController(IArticleService articleService)
+        private readonly IArticleService _articleService;
+        private readonly ArticleValidator _articleValidator;
+        private readonly IUserService _userService;
+        private readonly IMagazineService _magazineService;
+        public ArticleController(IUserService userservice, IArticleService articleService,IMagazineService magazineservice)
         {
-            
+            _magazineService = magazineservice;
+            _userService = userservice;
             _articleService = articleService;
+            _articleValidator = new ArticleValidator(_userService,_articleService,_magazineService);
         }
 
         [HttpGet("{id}")]
@@ -72,11 +77,12 @@ namespace BookProject.Controllers
             {
                 return BadRequest("Article information is missing");
             }
-            if(!ModelState.IsValid)
+            var validationResult = await _articleValidator.ValidateAsync(article);
+            if(!validationResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validationResult.Errors);
             }
-
+            
             var newArticle = await _articleService.AddAsync(article);
 
             return Ok(newArticle);
