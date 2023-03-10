@@ -5,13 +5,10 @@ using System.Collections.Generic;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-<<<<<<< HEAD
-=======
 using BookProject.Data;
 using BookProject.Application.Validation;
->>>>>>> naxy24/add-validation
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace BookProject.Controllers
 {

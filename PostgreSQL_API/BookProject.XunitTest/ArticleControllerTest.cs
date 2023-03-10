@@ -8,6 +8,7 @@ using BookProject.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Net;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BookProject.XunitTest
@@ -15,14 +16,22 @@ namespace BookProject.XunitTest
     public class ArticleControllerTest
     {
         private Mock<IArticleRepository> _mock;
+        private Mock<IMagazineRepository> _mockMagazine;
+        private Mock<IUserRepository> _mockUser;
         private readonly ArticleService _articleService;
+        private readonly UserService _userService;
+        private readonly MagazineService _magazineService;
         private readonly ArticleController _articleController;
         IMapper mapper = BookProjectMapper.Mapper;
         public ArticleControllerTest()
         {
             _mock = new Mock<IArticleRepository>();
+            _mockMagazine = new Mock<IMagazineRepository>();
+            _mockUser = new Mock<IUserRepository>();
             _articleService = new ArticleService(_mock.Object, mapper);
-            _articleController = new ArticleController(_articleService);
+            _magazineService = new MagazineService(_mockMagazine.Object);
+            _userService = new UserService(_mockUser.Object);
+            _articleController = new ArticleController(_userService,_articleService,_magazineService);
         }
         [Fact]
         public void Get_Returns_Correct_Id()
@@ -78,19 +87,30 @@ namespace BookProject.XunitTest
 
         }
         [Fact]
-        public void Create_Return_Correctly()
+        public async Task Create_Return_Correctly()
         {
             // Arrange
             var added = FakeData();
-            _mock.Setup(y => y.AddAsync(added).Result).Returns(added);
+            var articleModel = mapper.Map<ArticleModel>(added);
+
+            _mockUser.Setup(x => x.GetByIdAsync(articleModel.AuthorId))
+                            .ReturnsAsync(new User());
+
+            _mockMagazine.Setup(x => x.GetByIdAsync(articleModel.MagazineId))
+                                .ReturnsAsync(new Magazine());
+
+            _mock.Setup(x => x.GetByIdAsync(articleModel.id))
+                               .ReturnsAsync(null as Article);
+
+            _mock.Setup(x => x.AddAsync(added))
+                               .ReturnsAsync(added);
+
             // Act
-            var actionResult = _articleController.Create(mapper.Map<ArticleModel>(added));
+            var actionResult =  _articleController.Create(articleModel);
             var okObjectResult = actionResult.Result as OkObjectResult;
 
             // Assert
-
             Assert.IsType<OkObjectResult>(okObjectResult);
-
         }
 
         [Fact]
@@ -141,8 +161,9 @@ namespace BookProject.XunitTest
             {
                 id=1,
                 Title="test",
-                Content="test"
-                
+                Content="test",
+                MagazineId=1,
+                AuthorId=1
             };
         }
     }

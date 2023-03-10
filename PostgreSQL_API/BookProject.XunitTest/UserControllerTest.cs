@@ -139,7 +139,7 @@ namespace BookProject.XunitTest
                 Id = 1,
                 FirstName = "test",
                 LastName = "testlast",
-                Email = "tst"
+                Email = "tstd@gmail.com"
             };
         }
 
