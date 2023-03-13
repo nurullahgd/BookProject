@@ -5,6 +5,8 @@ using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
 using BookProject.Application.Validation;
+using BookProject.Data;
+using BookProject.Data.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,6 +19,7 @@ namespace BookProject.Controllers
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IUserService _userService;
         private readonly UserValidator _userValidator;
+        
 
         public UserController(IUserService userservice)
         {
@@ -63,7 +66,9 @@ namespace BookProject.Controllers
             }
 
             var newUser = await _userService.AddAsync(user);
-
+            var msgsender = new UserMessageSender();
+            var msgsendermap = mapper.Map<User>(user);
+            msgsender.SendUserAddedMessage(msgsendermap);
             return Ok(newUser);
         }
 
@@ -89,8 +94,10 @@ namespace BookProject.Controllers
                 LastName = user.LastName,
                 Email = user.Email
             };
-
+            var msgsender = new UserMessageSender();
             var updatedUser = await _userService.UpdateAsync(updatedUserModel);
+            var msgsendermap = mapper.Map<User>(updatedUser);
+            msgsender.SendUserUpdatedMessage(msgsendermap);
 
             return Ok(updatedUser);
         }
@@ -104,7 +111,8 @@ namespace BookProject.Controllers
                 return BadRequest("Error. Invalid ID!");
             }
 
-
+            var msgsender = new UserMessageSender();
+            msgsender.SendUserDeletedMessage(existingArticle);
             await _userService.DeleteAsync(id);
 
             return Ok("Deleted");
