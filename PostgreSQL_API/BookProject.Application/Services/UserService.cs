@@ -24,23 +24,20 @@ namespace BookProject.Application.Services
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _userRepository.GetAllAsync();
-            
         }
 
         public async Task<User> AddAsync(UserModel userModel)
         {
             var user = new User
             {
-                Id = userModel.Id,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
                 Email = userModel.Email
-                
             };
 
             return await _userRepository.AddAsync(user);
         }
-
+        
         public async Task<User> UpdateAsync(UserModel userModel)
         {
             var user = await _userRepository.GetByIdAsync(userModel.Id);

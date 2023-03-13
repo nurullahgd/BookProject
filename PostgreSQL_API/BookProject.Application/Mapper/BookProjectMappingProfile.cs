@@ -2,6 +2,7 @@
 using BookProject.Application.Models;
 using BookProject.Data.Entities;
 using BookProject.Data.Models;
+using System.Collections.Generic;
 
 namespace BookProject.Application.Mapper
 {
@@ -18,7 +19,9 @@ namespace BookProject.Application.Mapper
             CreateMap<ArticleResponse, ArticleJoinModel>().ReverseMap();
             CreateMap<ArticleResonseNames, ArticleJoinModel>().ReverseMap();
             CreateMap<Magazine, MagazineResponse>().ReverseMap();
-            
+            CreateMap<Order, OrderModel>().ReverseMap();
+            CreateMap<OrderModel, OrderResponse>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
         }
 
     }

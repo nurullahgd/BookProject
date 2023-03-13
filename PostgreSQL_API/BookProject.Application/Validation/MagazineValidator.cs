@@ -12,15 +12,15 @@ namespace BookProject.Application.Validation
 {
     public class MagazineValidator:AbstractValidator<MagazineModel>
     {
-        private readonly IArticleService _articleService;
-        public MagazineValidator(IArticleService articleService)
+        private readonly IMagazineService _magazineService;
+        public MagazineValidator(IMagazineService magazineService)
         {
-            _articleService = articleService;
+            _magazineService = magazineService;
             RuleFor(m => m.Id).NotEmpty().WithMessage("ID is required")
                 .GreaterThan(0).WithMessage("Magazine Id must be greater than 0")
                 .MustAsync(async (id, cancellationToken) =>
                 {
-                    var magazine = _articleService.GetByIdAsync(id);
+                    var magazine = _magazineService.GetByIdAsync(id);
                     return magazine == null;
                 }).WithMessage("A magazine with the same id already exists.");
             RuleFor(m => m.Name).NotEmpty().WithMessage("Name is required");

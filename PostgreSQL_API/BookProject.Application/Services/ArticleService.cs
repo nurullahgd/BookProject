@@ -68,7 +68,7 @@ namespace BookProject.Application.Services
             }
             article.Content = articleModel.Content ?? article.Content;
             article.Title = articleModel.Title ?? article.Title;
-            int authorId = articleModel.AuthorId;
+            //int authorId = articleModel.AuthorId;
             if(articleModel.AuthorId != 0)
             {
                 article.AuthorId = articleModel.AuthorId;

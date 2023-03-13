@@ -20,6 +20,7 @@ namespace BookProject.Data.Repositories
         {
             return await _context.Set<T>().FindAsync(id);
         }
+        
         public IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine()
         {
             var articles = _context.Set<Article>()
@@ -45,7 +46,7 @@ namespace BookProject.Data.Repositories
         {
             return await _context.Set<T>().ToListAsync();
         }
-        
+       
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);

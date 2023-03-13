@@ -42,6 +42,28 @@ namespace BookProject.Controllers
             var userModel = mapper.Map<UserResponse>(user);
             return Ok(userModel);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Login(LoginModel loginModel)
+        //{
+        //    if(loginModel == null)
+        //    {
+        //        return BadRequest("Invalid request body.");
+        //    }
+
+        //    var user = await _userService.GetByEmailAsync(loginModel.Email);
+        //    if(user == null)
+        //    {
+        //        return NotFound("User not found.");
+        //    }
+
+        //    if(user.Password != loginModel.Password)
+        //    {
+        //        return Unauthorized("Invalid email or password.");
+        //    }
+
+        //    var userModel = mapper.Map<UserResponse>(user);
+        //    return Ok(userModel);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

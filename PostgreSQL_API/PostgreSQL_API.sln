@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookProject.Application", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookProject.XunitTest", "BookProject.XunitTest\BookProject.XunitTest.csproj", "{38C57AE2-3C8F-478F-96DE-448D5B4CB5D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookProject.LoginAPI", "BookProject.LoginAPI\BookProject.LoginAPI.csproj", "{A034207A-4BA2-4A62-A991-60390E1E7C13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{38C57AE2-3C8F-478F-96DE-448D5B4CB5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38C57AE2-3C8F-478F-96DE-448D5B4CB5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38C57AE2-3C8F-478F-96DE-448D5B4CB5D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A034207A-4BA2-4A62-A991-60390E1E7C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A034207A-4BA2-4A62-A991-60390E1E7C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A034207A-4BA2-4A62-A991-60390E1E7C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A034207A-4BA2-4A62-A991-60390E1E7C13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

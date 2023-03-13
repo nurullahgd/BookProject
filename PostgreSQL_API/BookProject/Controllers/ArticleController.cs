@@ -45,13 +45,7 @@ namespace BookProject.Controllers
             var articleModel = mapper.Map<ArticleModel>(article); 
             return Ok(articleModel);
         }
-        //[HttpGet]
-        //public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazine()
-        //{
-        //    var articles =  _articleService.GetArticleWithUserAndMagazine();
-        //    var response = mapper.Map<List<ArticleResponse>>(articles);
-        //    return Ok(response);
-        //}
+        
         [HttpGet]
         public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazineJustName()
         {

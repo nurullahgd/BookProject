@@ -10,6 +10,7 @@ using BookProject.Data.Repositories;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Services;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 
 namespace BookProject
 {
@@ -34,8 +35,10 @@ namespace BookProject
             services.AddScoped<IArticleRepository, ArticleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMagazineRepository, MagazineRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddAutoMapper(typeof(Startup));
-            //services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
