@@ -5,20 +5,20 @@ using System.Collections.Generic;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-using BookProject.Data;
-using BookProject.Application.Validation;
 
-
+using BookProject.Application.Validation.ArticleValidation;
 
 namespace BookProject.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    //[Authorize]
     public class ArticleController : ControllerBase
     {
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IArticleService _articleService;
-        private readonly ArticleValidator _articleValidator;
+        private readonly ArticleAddValidator _articleaddValidator;
+        private readonly ArticleUpdateValidator _articleUpdateValidator;
         private readonly IUserService _userService;
         private readonly IMagazineService _magazineService;
         public ArticleController(IUserService userservice, IArticleService articleService,IMagazineService magazineservice)
@@ -26,7 +26,9 @@ namespace BookProject.Controllers
             _magazineService = magazineservice;
             _userService = userservice;
             _articleService = articleService;
-            _articleValidator = new ArticleValidator(_userService,_articleService,_magazineService);
+            _articleaddValidator = new ArticleAddValidator(_userService,_articleService,_magazineService);
+            _articleUpdateValidator = new ArticleUpdateValidator(_userService, _articleService, _magazineService);
+
         }
 
         [HttpGet("{id}")]
@@ -55,6 +57,7 @@ namespace BookProject.Controllers
         }
 
         [HttpGet]
+        
         public async Task<IActionResult> GetAll()
         {
             var articles =  _articleService.GetArticleWithUserAndMagazine();
@@ -70,15 +73,16 @@ namespace BookProject.Controllers
             {
                 return BadRequest("Article information is missing");
             }
-            var validationResult = await _articleValidator.ValidateAsync(article);
+            var validationResult = await _articleaddValidator.ValidateAsync(article);
             if(!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
             
             var newArticle = await _articleService.AddAsync(article);
+            var articleResponse = mapper.Map<ArticleModel>(newArticle);
 
-            return Ok(newArticle);
+            return Ok(articleResponse);
         }
 
         [HttpPut("{id}")]
@@ -102,10 +106,16 @@ namespace BookProject.Controllers
                 AuthorId=article.AuthorId,
                 MagazineId=article.MagazineId
             };
+            var validationResult = await _articleUpdateValidator.ValidateAsync(article);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
 
             var updatedArticle = await _articleService.UpdateAsync(updatedArticleModel);
-
-            return Ok(updatedArticle);
+            var articleResponse = mapper.Map<ArticleModel>(updatedArticle);
+            return Ok(articleResponse);
         }
 
         [HttpDelete("{id}")]
@@ -116,7 +126,7 @@ namespace BookProject.Controllers
             {
                 return BadRequest("Error. Invalid ID!");
             }
-
+            
             await _articleService.DeleteAsync(id);
 
             return Ok("Deleted");

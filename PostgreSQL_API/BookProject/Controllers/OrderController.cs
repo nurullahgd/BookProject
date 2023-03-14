@@ -4,28 +4,30 @@ using System.Threading.Tasks;
 using BookProject.Application.Models;
 using BookProject.Application.Mapper;
 using AutoMapper;
-using BookProject.Application.Validation;
+using BookProject.Application.Validation.OrderValidation;
 using System.Collections.Generic;
-
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookProject.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    //[Authorize]
     public class OrderController : ControllerBase
     {
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IArticleService _articleService;
         private readonly IOrderService _orderService;
-        private readonly OrderValidator _orderValidator;
+        private readonly OrderAddValidator _orderAddValidator;
+        private readonly OrderUpdateValidator _orderUpdateValidator;
         private readonly IUserService _userService;
         public OrderController(IOrderService orderservice,IUserService userservice, IArticleService articleService)
         {
             _orderService = orderservice;
             _userService = userservice;
             _articleService = articleService;
-            _orderValidator = new OrderValidator(_orderService,_articleService,_userService);
+            _orderAddValidator = new OrderAddValidator(_orderService,_articleService,_userService);
+            _orderUpdateValidator= new OrderUpdateValidator(_orderService, _articleService, _userService);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -57,15 +59,15 @@ namespace BookProject.Controllers
             {
                 return BadRequest("Order information is missing");
             }
-            var validationResult = await _orderValidator.ValidateAsync(order);
+            var validationResult = await _orderAddValidator.ValidateAsync(order);
             if(!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors);
             }
 
             var newOrder = await _orderService.AddAsync(order);
-
-            return Ok(newOrder);
+            var orderResponse = mapper.Map<OrderModel>(newOrder);
+            return Ok(orderResponse);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, OrderModel order)
@@ -87,10 +89,16 @@ namespace BookProject.Controllers
                 UserId=order.UserId,
                 CreatedDate=order.CreatedDate
             };
+            var validationResult = await _orderUpdateValidator.ValidateAsync(order);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
 
             var updatedOrder = await _orderService.UpdateAsync(updatedOrderModel);
+            var orderResponse = mapper.Map<OrderModel>(updatedOrder);
 
-            return Ok(updatedOrder);
+            return Ok(orderResponse);
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

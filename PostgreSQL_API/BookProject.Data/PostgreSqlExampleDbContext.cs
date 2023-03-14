@@ -18,12 +18,7 @@ namespace BookProject.Data
             .WithMany(m => m.Articles)
             .HasForeignKey(a => a.MagazineId)
             .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Article>()
-                .HasOne(a => a.Author)
-                .WithMany(u => u.Articles)
-                .HasForeignKey(a => a.AuthorId)
-                .OnDelete(DeleteBehavior.Cascade);
+            
         }
 
         public DbSet<Article> Articles { get; set; }

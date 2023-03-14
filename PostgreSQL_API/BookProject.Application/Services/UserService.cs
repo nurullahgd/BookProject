@@ -30,6 +30,7 @@ namespace BookProject.Application.Services
         {
             var user = new User
             {
+                Id = userModel.Id,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
                 Email = userModel.Email

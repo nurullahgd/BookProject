@@ -4,27 +4,30 @@ using System.Threading.Tasks;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-using BookProject.Application.Validation;
+using BookProject.Application.Validation.UserValidation;
 using BookProject.Data;
 using BookProject.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookProject.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    //[Authorize]
     public class UserController : ControllerBase
     {
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IUserService _userService;
-        private readonly UserValidator _userValidator;
+        private readonly UserAddValidator _userValidator;
+        private readonly UserUpdateValidator _userUpdateValidator;
         
 
         public UserController(IUserService userservice)
         {
             _userService = userservice;
-            _userValidator = new UserValidator(_userService);
+            _userValidator = new UserAddValidator(_userService);
+            _userValidator = new UserAddValidator(_userService);
         }
 
         [HttpGet("{id}")]
@@ -37,34 +40,12 @@ namespace BookProject.Controllers
             var user = await _userService.GetByIdAsync(id);
             if(user == null)
             {
-                return NotFound();
+                return NotFound("User Not Found");
             }
             var userModel = mapper.Map<UserResponse>(user);
             return Ok(userModel);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginModel loginModel)
-        //{
-        //    if(loginModel == null)
-        //    {
-        //        return BadRequest("Invalid request body.");
-        //    }
-
-        //    var user = await _userService.GetByEmailAsync(loginModel.Email);
-        //    if(user == null)
-        //    {
-        //        return NotFound("User not found.");
-        //    }
-
-        //    if(user.Password != loginModel.Password)
-        //    {
-        //        return Unauthorized("Invalid email or password.");
-        //    }
-
-        //    var userModel = mapper.Map<UserResponse>(user);
-        //    return Ok(userModel);
-        //}
-
+        
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -88,9 +69,9 @@ namespace BookProject.Controllers
             }
 
             var newUser = await _userService.AddAsync(user);
-            var msgsender = new UserMessageSender();
-            var msgsendermap = mapper.Map<User>(user);
-            msgsender.SendUserAddedMessage(msgsendermap);
+            //var msgsender = new UserMessageSender();
+            //var msgsendermap = mapper.Map<User>(user);
+            //msgsender.SendUserAddedMessage(msgsendermap);
             return Ok(newUser);
         }
 
@@ -116,10 +97,15 @@ namespace BookProject.Controllers
                 LastName = user.LastName,
                 Email = user.Email
             };
-            var msgsender = new UserMessageSender();
+            var validationResult = await _userUpdateValidator.ValidateAsync(updatedUserModel);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
             var updatedUser = await _userService.UpdateAsync(updatedUserModel);
-            var msgsendermap = mapper.Map<User>(updatedUser);
-            msgsender.SendUserUpdatedMessage(msgsendermap);
+            //var msgsender = new UserMessageSender();
+            //var msgsendermap = mapper.Map<User>(updatedUser);
+            //msgsender.SendUserUpdatedMessage(msgsendermap);
 
             return Ok(updatedUser);
         }

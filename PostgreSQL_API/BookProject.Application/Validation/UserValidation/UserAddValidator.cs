@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookProject.Application.Validation
+namespace BookProject.Application.Validation.UserValidation
 {
-    public class UserValidator : AbstractValidator<UserModel>
+    public class UserAddValidator : AbstractValidator<UserModel>
     {
         private readonly IUserService _userService;
-        public UserValidator(IUserService userService)
+        public UserAddValidator(IUserService userService)
         {
             _userService = userService;
 
@@ -24,7 +24,6 @@ namespace BookProject.Application.Validation
                     var user = await _userService.GetByIdAsync(id);
                     return user == null;
                 }).WithMessage("A user with the same id already exists.");
-
             RuleFor(u => u.FirstName).NotEmpty().WithMessage("First name is required.").MinimumLength(3).WithMessage("Fist name must be at least 3 characters.");
             RuleFor(u => u.LastName).NotEmpty().WithMessage("Last name is required.");
             RuleFor(u => u.Email).NotEmpty().WithMessage("Email is required.").EmailAddress().WithMessage("Email is not valid.");

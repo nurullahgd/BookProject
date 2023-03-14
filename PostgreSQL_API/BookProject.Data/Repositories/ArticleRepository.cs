@@ -28,7 +28,7 @@ namespace BookProject.Data.Repositories
                      MagazineName = a.Magazine.Name,
                      AuthorId=a.AuthorId,
                      AuthorName = a.Author.FirstName + " " + a.Author.LastName
-                 }); ;
+                 }); 
             return result;
         }
     }
