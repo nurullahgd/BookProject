@@ -105,15 +105,18 @@ namespace BookProject
                 app.UseAuthentication();
                 //app.UseAuthorization();
                 app.UseDeveloperExceptionPage();
+
+
+
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookProject v1"));
+
             }
 
             app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

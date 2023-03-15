@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace BookProject.Data.Entities
 {
-    public class AccountDto
+    public class Account
     {
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public string Username { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

@@ -1,0 +1,20 @@
+﻿{
+
+  //"GlobalConfiguration": {
+  //  "BaseUrl": "https://localhost:5000"
+  //},
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{Controller}/{ActionName}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/{Controller}/{ActionName}"
+    }
+    
+  ]
+}

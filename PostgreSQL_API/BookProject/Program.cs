@@ -14,7 +14,9 @@ namespace BookProject
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel()
+                              .UseStartup<Startup>()
+                              .UseUrls("http://localhost:8000");
                 });
     }
 }
