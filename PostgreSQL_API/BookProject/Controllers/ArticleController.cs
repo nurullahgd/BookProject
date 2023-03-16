@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-
+using BookProject.Data.Messages;
 using BookProject.Application.Validation.ArticleValidation;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using BookProject.Data.Entities;
 
 namespace BookProject.Controllers
 {
@@ -23,6 +24,7 @@ namespace BookProject.Controllers
         private readonly ArticleUpdateValidator _articleUpdateValidator;
         private readonly IUserService _userService;
         private readonly IMagazineService _magazineService;
+        
         public ArticleController(IUserService userservice, IArticleService articleService,IMagazineService magazineservice)
         {
             _magazineService = magazineservice;
@@ -30,7 +32,6 @@ namespace BookProject.Controllers
             _articleService = articleService;
             _articleaddValidator = new ArticleAddValidator(_userService,_articleService,_magazineService);
             _articleUpdateValidator = new ArticleUpdateValidator(_userService, _articleService, _magazineService);
-
         }
 
         [HttpGet("{id}")]
@@ -59,8 +60,8 @@ namespace BookProject.Controllers
         
         public async Task<IActionResult> GetAll()
         {
-            var articles =  _articleService.GetArticleWithUserAndMagazine();
-            var response = mapper.Map<List<ArticleResponse>>(articles);
+            var articles =  _articleService.GetAllAsync();
+            var response = mapper.Map<List<ArticleModel>>(articles);
             return Ok(response);
 
         }
@@ -77,10 +78,11 @@ namespace BookProject.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
-            
+            var _msgsender = new ArticleMessageSender();
             var newArticle = await _articleService.AddAsync(article);
             var articleResponse = mapper.Map<ArticleResponse>(newArticle);
-
+            var msgsendermap = mapper.Map<Article>(newArticle);
+            _msgsender.SendArticleAddedMessage(msgsendermap);
             return Ok(newArticle);
         }
 

@@ -33,7 +33,7 @@ namespace BookProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            
+
             var user = await _userService.GetByIdAsync(id);
             if(user == null)
             {
@@ -42,7 +42,7 @@ namespace BookProject.Controllers
             var userModel = mapper.Map<UserResponse>(user);
             return Ok(userModel);
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -89,7 +89,7 @@ namespace BookProject.Controllers
 
             var updatedUserModel = new UserModel
             {
-                Id=existingUser.Id,
+                Id = existingUser.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email
