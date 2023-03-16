@@ -8,7 +8,7 @@ using BookProject.Application.Validation.UserValidation;
 using BookProject.Data;
 using BookProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-
+using System;
 
 namespace BookProject.Controllers
 {
@@ -27,20 +27,17 @@ namespace BookProject.Controllers
         {
             _userService = userservice;
             _userValidator = new UserAddValidator(_userService);
-            _userValidator = new UserAddValidator(_userService);
+            _userUpdateValidator = new UserUpdateValidator(_userService);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            if(id <= 0)
-            {
-                return BadRequest("Invalid User ID");
-            }
+            
             var user = await _userService.GetByIdAsync(id);
             if(user == null)
             {
-                return NotFound("User Not Found");
+                return BadRequest("Invalid User ID");
             }
             var userModel = mapper.Map<UserResponse>(user);
             return Ok(userModel);
@@ -55,7 +52,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserModel user)
+        public async Task<IActionResult> Create(UserResponse user)
         {
             if(user == null)
             {
@@ -77,7 +74,7 @@ namespace BookProject.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UserModel user)
+        public async Task<IActionResult> Update(Guid id, UserModel user)
         {
             if(!ModelState.IsValid)
             {
@@ -92,7 +89,7 @@ namespace BookProject.Controllers
 
             var updatedUserModel = new UserModel
             {
-                Id = existingUser.Id,
+                Id=existingUser.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email
@@ -106,12 +103,11 @@ namespace BookProject.Controllers
             //var msgsender = new UserMessageSender();
             //var msgsendermap = mapper.Map<User>(updatedUser);
             //msgsender.SendUserUpdatedMessage(msgsendermap);
-
             return Ok(updatedUser);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var existingArticle = await _userService.GetByIdAsync(id);
             if(existingArticle == null)

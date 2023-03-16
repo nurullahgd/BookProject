@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookProject.Data.Entities
 {
-    public class Account
+    public class AccountHashes
     {
         public string Username { get; set; }
         public byte[] PasswordHash { get; set; }

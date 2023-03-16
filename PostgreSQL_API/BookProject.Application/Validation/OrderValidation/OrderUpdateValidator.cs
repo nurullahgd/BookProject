@@ -22,20 +22,8 @@ namespace BookProject.Application.Validation.OrderValidation
             _userService = userService;
             _orderService = orderService;
 
-            RuleFor(o => o.ArticleId).NotEmpty().WithMessage("Article Id is required")
-                .GreaterThan(0).WithMessage("Id must be greater than 0")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _articleService.GetByIdAsync(id) != null;
-                }).WithMessage("Article does not exist.");
-
-            RuleFor(o => o.UserId).NotEmpty().WithMessage("User Id is required")
-                .GreaterThan(0).WithMessage("Id must be greater than 0")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _userService.GetByIdAsync(id) != null;
-                }).WithMessage("Author does not exist.");
-
+            RuleFor(o => o.ArticleId).NotEmpty().WithMessage("Article Id is required");
+            ;
             RuleFor(o => o.CreatedDate).NotEmpty().WithMessage("CreatedDate is required.");
 
         }

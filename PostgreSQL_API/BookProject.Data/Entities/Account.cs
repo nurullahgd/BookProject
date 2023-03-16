@@ -8,8 +8,9 @@ namespace BookProject.Data.Entities
 {
     public class Account
     {
-        
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public Guid Id { get; set; }
+        public string Username { get; set; } 
+        public string Password { get; set; } 
+        public ICollection<Order> Orders { get; set; }
     }
 }

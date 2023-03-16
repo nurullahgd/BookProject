@@ -21,7 +21,7 @@ namespace BookProject.Data.Repositories
                  .Include(a => a.Author)
                  .Select(a => new ArticleJoinModel
                  {
-                     id = a.id,
+                     Id = a.Id,
                      Title = a.Title,
                      Content = a.Content,
                      MagazineId = a.MagazineId,

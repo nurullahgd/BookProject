@@ -19,7 +19,7 @@ namespace BookProject.Application.Services
             _orderRepository = orderRepository;
         }
 
-        public async Task<Order> GetByIdAsync(int id)
+        public async Task<Order> GetByIdAsync(Guid id)
         {
             return await _orderRepository.GetByIdAsync(id);
         }
@@ -29,14 +29,14 @@ namespace BookProject.Application.Services
             return await _orderRepository.GetAllAsync();
         }
 
-        public async Task<Order> AddAsync(OrderModel orderModel)
+        public async Task<Order> AddAsync(OrderResponse orderModel)
         {
             var order = new Order
             {
-                Id = orderModel.Id,
+                
                 ArticleId = orderModel.ArticleId,
                 CreatedDate = orderModel.CreatedDate,
-                UserId = orderModel.UserId
+                AccountId = orderModel.AccountId
             };
 
             return await _orderRepository.AddAsync(order);
@@ -51,14 +51,6 @@ namespace BookProject.Application.Services
                 // Kullanıcı bulunamadı
                 return null;
             }
-            if(orderModel.ArticleId != 0)
-            {
-                order.ArticleId = orderModel.ArticleId;
-            }
-            else
-            {
-                order.ArticleId = order.ArticleId;
-            }
 
             if(orderModel.CreatedDate !=default)
             {
@@ -68,19 +60,12 @@ namespace BookProject.Application.Services
             {
                 order.CreatedDate = order.CreatedDate;
             }
-            if(orderModel.UserId!=0)
-            {
-                order.UserId = orderModel.UserId;
-                
-            }
-            else
-            {
-                order.UserId = order.UserId;
-            }
+            
+            
             return await _orderRepository.UpdateAsync(order);
         }
 
-        public async Task<Order> DeleteAsync(int id)
+        public async Task<Order> DeleteAsync(Guid id)
         {
             return await _orderRepository.DeleteAsync(id);
         }

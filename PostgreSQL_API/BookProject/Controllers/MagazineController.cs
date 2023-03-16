@@ -6,6 +6,7 @@ using BookProject.Application.Mapper;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using BookProject.Application.Validation.MagazineValidation;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,17 +29,14 @@ namespace BookProject.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            if(id <= 0)
-            {
-                return BadRequest("Invalid Magazine ID");
-            }
+            
 
             var magazine = await _magazineService.GetByIdAsync(id);
             if(magazine == null)
             {
-                return NotFound();
+                return BadRequest("Invalid Magazine ID");
             }
             var magazineModel = mapper.Map<MagazineResponse>(magazine);
             return Ok(magazineModel);
@@ -52,7 +50,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(MagazineModel magazine)
+        public async Task<IActionResult> Create(MagazineResponse magazine)
         {
             if(magazine == null)
             {
@@ -74,7 +72,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, MagazineModel magazine)
+        public async Task<IActionResult> Update(Guid id, MagazineModel magazine)
         {
             if(!ModelState.IsValid)
             {
@@ -103,7 +101,7 @@ namespace BookProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var existingArticle = await _magazineService.GetByIdAsync(id);
             if(existingArticle == null)

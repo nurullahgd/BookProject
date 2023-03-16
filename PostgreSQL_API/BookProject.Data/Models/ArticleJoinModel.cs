@@ -1,13 +1,15 @@
-﻿namespace BookProject.Data.Models
+﻿using System;
+
+namespace BookProject.Data.Models
 {
     public class ArticleJoinModel
     {
-        public int id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public int MagazineId { get; set; }
+        public Guid MagazineId { get; set; }
         public string MagazineName { get; set; }
-        public int AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
         public string AuthorName { get; set; }
     }
 }

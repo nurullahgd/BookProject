@@ -4,6 +4,7 @@ using BookProject.Data.Repositories;
 using BookProject.Data.Entities;
 using System.Collections.Generic;
 using BookProject.Application.Models;
+using System;
 
 namespace BookProject.Application.Services
 {
@@ -16,7 +17,7 @@ namespace BookProject.Application.Services
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             return await _userRepository.GetByIdAsync(id);
         }
@@ -26,11 +27,10 @@ namespace BookProject.Application.Services
             return await _userRepository.GetAllAsync();
         }
 
-        public async Task<User> AddAsync(UserModel userModel)
+        public async Task<User> AddAsync(UserResponse userModel)
         {
             var user = new User
             {
-                Id = userModel.Id,
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
                 Email = userModel.Email
@@ -55,7 +55,7 @@ namespace BookProject.Application.Services
             return await _userRepository.UpdateAsync(user);
         }
 
-        public async Task<User> DeleteAsync(int id)
+        public async Task<User> DeleteAsync(Guid id)
         {
             return await _userRepository.DeleteAsync(id);
         }

@@ -4,6 +4,7 @@ using BookProject.Application.Interfaces;
 using BookProject.Data.Repositories;
 using BookProject.Data.Entities;
 using BookProject.Application.Models;
+using System;
 
 namespace BookProject.Application.Services
 {
@@ -16,7 +17,7 @@ namespace BookProject.Application.Services
             _magazineRepository = magazineRepository;
         }
 
-        public async Task<Magazine> GetByIdAsync(int id)
+        public async Task<Magazine> GetByIdAsync(Guid id)
         {
             return await _magazineRepository.GetByIdAsync(id);
         }
@@ -26,11 +27,10 @@ namespace BookProject.Application.Services
             return await _magazineRepository.GetAllAsync();
         }
 
-        public async Task<Magazine> AddAsync(MagazineModel magazineModel)
+        public async Task<Magazine> AddAsync(MagazineResponse magazineModel)
         {
             var magazine = new Magazine
             {
-                Id = magazineModel.Id,
                 Name = magazineModel.Name
             };
             return await _magazineRepository.AddAsync(magazine);
@@ -52,7 +52,7 @@ namespace BookProject.Application.Services
             return await _magazineRepository.UpdateAsync(magazine);
         }
 
-        public async Task<Magazine> DeleteAsync(int id)
+        public async Task<Magazine> DeleteAsync(Guid id)
         {
             return await _magazineRepository.DeleteAsync(id);
         }

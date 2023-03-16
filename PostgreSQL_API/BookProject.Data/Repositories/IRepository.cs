@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookProject.Data.Repositories;
 
@@ -10,11 +11,11 @@ namespace BookProject.Data.Repositories
         Tüm CRUD işlemleri, "T" tipindeki herhangi bir sınıfı işleyebilen yöntemler içerir.
         Örneğin, Post, Comment, User gibi farklı veri modelleri için kullanılabilir.*/
         //GENEL CRUD İŞLEMİ
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(Guid id);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> AddAsync(T entity);
-        Task<T> UpdateAsync(T entity);
-        Task<T> DeleteAsync(int id);
+        Task<T> UpdateAsync(T entity);  
+        Task<T> DeleteAsync(Guid id);
 
     }
 }

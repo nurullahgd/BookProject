@@ -6,6 +6,7 @@ using BookProject.Application.Mapper;
 using AutoMapper;
 using BookProject.Application.Validation.OrderValidation;
 using System.Collections.Generic;
+using System;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BookProject.Controllers
@@ -30,17 +31,14 @@ namespace BookProject.Controllers
             _orderUpdateValidator= new OrderUpdateValidator(_orderService, _articleService, _userService);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            if(id <= 0)
-            {
-                return BadRequest("Invalid Order ID");
-            }
+            
             var order = await _orderService.GetByIdAsync(id);
 
             if(order == null)
             {
-                return NotFound();
+                return BadRequest("Invalid Order ID");
             }
             var orderModel = mapper.Map<OrderModel>(order);
             return Ok(orderModel);
@@ -53,7 +51,7 @@ namespace BookProject.Controllers
             return Ok(orderResponses);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(OrderModel order)
+        public async Task<IActionResult> Create(OrderResponse order)
         {
             if(order == null)
             {
@@ -66,11 +64,11 @@ namespace BookProject.Controllers
             }
 
             var newOrder = await _orderService.AddAsync(order);
-            var orderResponse = mapper.Map<OrderModel>(newOrder);
-            return Ok(orderResponse);
+            //var orderResponse = mapper.Map<OrderModel>(newOrder);
+            return Ok(newOrder);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, OrderModel order)
+        public async Task<IActionResult> Update(Guid id, OrderModel order)
         {
             if(!ModelState.IsValid)
             {
@@ -86,7 +84,7 @@ namespace BookProject.Controllers
             {
                 Id=existingOrder.Id,
                 ArticleId=order.ArticleId,
-                UserId=order.UserId,
+                AccountId=order.AccountId,
                 CreatedDate=order.CreatedDate
             };
             var validationResult = await _orderUpdateValidator.ValidateAsync(order);
@@ -101,7 +99,7 @@ namespace BookProject.Controllers
             return Ok(orderResponse);
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var existingOrder = await _orderService.GetByIdAsync(id);
             if(existingOrder == null)

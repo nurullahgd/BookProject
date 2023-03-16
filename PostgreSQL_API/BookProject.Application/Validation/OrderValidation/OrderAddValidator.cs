@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookProject.Application.Validation.OrderValidation
 {
-    public class OrderAddValidator: AbstractValidator<OrderModel>
+    public class OrderAddValidator: AbstractValidator<OrderResponse>
     {
         private readonly IOrderService _orderService;
         private readonly IArticleService _articleService;
@@ -21,27 +21,9 @@ namespace BookProject.Application.Validation.OrderValidation
             _userService = userService;
             _orderService = orderService;
 
-            RuleFor(o => o.Id).NotEmpty().WithMessage("Id is required")
-                .GreaterThan(0).WithMessage("Id must be greater than 0")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    var order = await _articleService.GetByIdAsync(id);
-                    return order == null;
-                }).WithMessage("A Order with the same id already exists.");
+            RuleFor(o => o.ArticleId).NotEmpty().WithMessage("Article Id is required");
 
-            RuleFor(o=>o.ArticleId).NotEmpty().WithMessage("Article Id is required")
-                .GreaterThan(0).WithMessage("ArticleId must be greater than 0")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _articleService.GetByIdAsync(id) != null;
-                }).WithMessage("Article does not exist.");
-
-            RuleFor(o => o.UserId).NotEmpty().WithMessage("User Id is required")
-                .GreaterThan(0).WithMessage("ArticleId must be greater than 0")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _userService.GetByIdAsync(id) != null;
-                }).WithMessage("Author does not exist.");
+            RuleFor(o => o.AccountId).NotEmpty().WithMessage("User Id is required");
 
             RuleFor(o => o.CreatedDate).NotEmpty().WithMessage("CreatedDate is required.");
 

@@ -10,10 +10,10 @@ namespace BookProject.Application.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> GetByIdAsync(int id);
+        Task<Order> GetByIdAsync(Guid id);
         Task<IEnumerable<Order>> GetAllAsync();
-        Task<Order> AddAsync(OrderModel user);
+        Task<Order> AddAsync(OrderResponse user);
         Task<Order> UpdateAsync(OrderModel user);
-        Task<Order> DeleteAsync(int id);
+        Task<Order> DeleteAsync(Guid id);
     }
 }

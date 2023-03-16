@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BookProject.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using BookProject.Data.Models;
+using System;
 
 namespace BookProject.Data.Repositories
 {
@@ -16,7 +17,7 @@ namespace BookProject.Data.Repositories
             _context = context;
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
@@ -28,7 +29,7 @@ namespace BookProject.Data.Repositories
         .Include(a => a.Author)
         .Select(a => new ArticleJoinModel
         {
-            id = a.id,
+            Id = a.Id,
             Title = a.Title,
             Content = a.Content,
             MagazineId = a.MagazineId,
@@ -61,7 +62,7 @@ namespace BookProject.Data.Repositories
             return entity;
         }
         
-        public async Task<T> DeleteAsync(int id)
+        public async Task<T> DeleteAsync(Guid id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             _context.Set<T>().Remove(entity);

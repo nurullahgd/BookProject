@@ -22,6 +22,9 @@ namespace BookProject.Application.Mapper
             CreateMap<Order, OrderModel>().ReverseMap();
             CreateMap<OrderModel, OrderResponse>().ReverseMap();
             CreateMap<Order, OrderResponse>().ReverseMap();
+            CreateMap<Account, AccountResponse>().ReverseMap();
+            CreateMap<Account, AccountModel>().ReverseMap();
+            CreateMap<AccountModel, AccountResponse>().ReverseMap();
         }
 
     }

@@ -11,6 +11,11 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using BookProject.Application.Interfaces;
+using BookProject.Application.Mapper;
+using AutoMapper;
+using BookProject.Application.Models;
+using BookProject.Application.Validation.AccountValidation;
 
 namespace BookProject.Controllers
 {
@@ -18,41 +23,52 @@ namespace BookProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public AuthController(IConfiguration configuration)
+        IMapper mapper = BookProjectMapper.Mapper;
+        private readonly IAccountService _accountService;
+        private readonly AccountValidator _accountValidator;
+        public AuthController(IConfiguration configuration, IAccountService accountService)
         {
             _configuration = configuration;
+            _accountService = accountService;
         }
-        public static Account acc = new Account();
+        public static AccountHashes acc = new AccountHashes();
         private readonly IConfiguration _configuration;
 
         [HttpPost("register")]
-        public async Task<ActionResult<Account>> Register(AccountDto request)
+        public async Task<ActionResult<AccountHashes>> Register(AccountResponse request)
         {
-            CreatePasswordHash(request.Password, out byte[] Passwordhash, out byte[] PasswordSalt);
-
-            acc.Username = request.Username;
-            acc.PasswordHash = Passwordhash;
-            acc.PasswordSalt = PasswordSalt;
-            return Ok(acc);
+            var validationResult = await _accountValidator.ValidateAsync(request);
+            if(!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+            if(request == null)
+            {
+                return BadRequest("User information is missing.");
+            }
+            var newacc = await _accountService.AddAsync(request);
+            return Ok(newacc);
         }
-        
-        
+
+
         [HttpPost("login")]
-        public async Task<ActionResult<string>>Login(AccountDto request)
+        public async Task<ActionResult<string>> Login(AccountResponse request)
         {
-            if(acc.Username!=request.Username)
+            var user = await _accountService.FindUsernameAndPassword(request.Username,request.Password);
+            //var test = mapper.Map<AccountResponse>(user);
+            if(user == null)
             {
                 return BadRequest("User Not found");
             }
-            if(!VerifyPasswordHash(request.Password,acc.PasswordHash,acc.PasswordSalt))
-            {
-                return BadRequest("Wrong Password");
-            }
+            CreatePasswordHash(request.Password, out byte[] Passwordhash, out byte[] PasswordSalt);
+            acc.Username = request.Username;
+            acc.PasswordHash = Passwordhash;
+            acc.PasswordSalt = PasswordSalt;
             string token = CreateToken(acc);
             return Ok(token);
         }
 
-        private string CreateToken(Account acc)
+        private string CreateToken(AccountHashes acc)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -61,8 +77,8 @@ namespace BookProject.Controllers
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Key").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
-                claims:claims,
-                expires:DateTime.Now.AddDays(1),
+                claims: claims,
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
@@ -76,7 +92,7 @@ namespace BookProject.Controllers
             }
         }
 
-        private bool VerifyPasswordHash(string password,  byte[] Passwordhash,  byte[] PasswordSalt)
+        private bool VerifyPasswordHash(string password, byte[] Passwordhash, byte[] PasswordSalt)
         {
             using(var hmac = new HMACSHA512(PasswordSalt))
             {

@@ -1,8 +1,10 @@
-﻿namespace BookProject.Application.Models
+﻿using System;
+
+namespace BookProject.Application.Models
 {
     public class MagazineModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -24,21 +24,10 @@ namespace BookProject.Application.Validation.ArticleValidation
 
             RuleFor(a => a.Title).NotEmpty().WithMessage("Title is Required");
 
-            RuleFor(a => a.MagazineId).NotEmpty().WithMessage("Magazine is required")
-                .GreaterThan(0).WithMessage("AuthorId must be greater than 0!")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _magazineService.GetByIdAsync(id) != null;
-                }).WithMessage("Magazine does not exist.");
+            RuleFor(a => a.MagazineId).NotEmpty().WithMessage("Magazine is required");
 
-            RuleFor(a => a.AuthorId).NotEmpty().WithMessage("Author is required")
-                .GreaterThan(0).WithMessage("AuthorId must be greater than 0!")
-                .MustAsync(async (id, cancellationToken) =>
-                {
-                    return await _userService.GetByIdAsync(id) != null;
-                }).WithMessage("Author does not exist.");
+            RuleFor(a => a.AuthorId).NotEmpty().WithMessage("Author is required");
 
-            RuleFor(a => a.id).NotEmpty().WithMessage("Id is required!");
         }
     }
 }

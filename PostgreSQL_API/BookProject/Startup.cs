@@ -46,6 +46,8 @@ namespace BookProject
             services.AddScoped<IMagazineRepository, MagazineRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddControllers();
@@ -54,7 +56,7 @@ namespace BookProject
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
@@ -103,7 +105,7 @@ namespace BookProject
             if(env.IsDevelopment())
             {
                 app.UseAuthentication();
-                //app.UseAuthorization();
+                app.UseAuthorization();
                 app.UseDeveloperExceptionPage();
 
 

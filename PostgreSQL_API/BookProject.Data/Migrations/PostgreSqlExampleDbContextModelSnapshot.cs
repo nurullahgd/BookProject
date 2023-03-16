@@ -19,26 +19,44 @@ namespace BookProject.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            modelBuilder.Entity("BookProject.Data.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
+
             modelBuilder.Entity("BookProject.Data.Entities.Article", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Content")
                         .HasColumnType("text");
 
-                    b.Property<int>("MagazineId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("MagazineId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
@@ -49,10 +67,10 @@ namespace BookProject.Data.Migrations
 
             modelBuilder.Entity("BookProject.Data.Entities.Magazine", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -64,35 +82,35 @@ namespace BookProject.Data.Migrations
 
             modelBuilder.Entity("BookProject.Data.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
-                    b.Property<int>("ArticleId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ArticleId");
+                    b.HasIndex("AccountId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ArticleId");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("BookProject.Data.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -129,21 +147,26 @@ namespace BookProject.Data.Migrations
 
             modelBuilder.Entity("BookProject.Data.Entities.Order", b =>
                 {
+                    b.HasOne("BookProject.Data.Entities.Account", "Account")
+                        .WithMany("Orders")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BookProject.Data.Entities.Article", "Article")
                         .WithMany()
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookProject.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Account");
 
                     b.Navigation("Article");
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("BookProject.Data.Entities.Account", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("BookProject.Data.Entities.Magazine", b =>

@@ -17,8 +17,6 @@ namespace BookProject.Application.Validation.MagazineValidation
         {
             _magazineService = magazineService;
 
-            RuleFor(m => m.Id).NotEmpty().WithMessage("ID is required")
-                .GreaterThan(0).WithMessage("Magazine Id must be greater than 0");
 
             RuleFor(m => m.Name).NotEmpty().WithMessage("Name is required");
         }

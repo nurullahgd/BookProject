@@ -8,8 +8,8 @@ namespace BookProject.Application.Models
 {
     public class OrderResponse
     {
-        public int UserId { get; set; }
-        public int ArticleId { get; set; }
+        public Guid AccountId { get; set; }
+        public Guid ArticleId { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

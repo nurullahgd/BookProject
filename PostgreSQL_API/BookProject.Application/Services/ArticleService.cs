@@ -32,7 +32,7 @@ namespace BookProject.Application.Services
             
         }
 
-        public async Task<Article> GetByIdAsync(int id)
+        public async Task<Article> GetByIdAsync(Guid id)
         {
             return await _articleRepository.GetByIdAsync(id);
         }
@@ -43,11 +43,10 @@ namespace BookProject.Application.Services
         }
         
 
-        public async Task<Article> AddAsync(ArticleModel articleModel)
+        public async Task<Article> AddAsync(ArticleResponse articleModel)
         {
             var article = new Article
             {
-                id = articleModel.id,
                 Title = articleModel.Title,
                 Content = articleModel.Content,
                 AuthorId = articleModel.AuthorId,
@@ -59,7 +58,7 @@ namespace BookProject.Application.Services
 
         public async Task<Article> UpdateAsync(ArticleModel articleModel)
         {
-            var article = await _articleRepository.GetByIdAsync(articleModel.id);
+            var article = await _articleRepository.GetByIdAsync(articleModel.Id);
 
             if(article == null)
             {
@@ -68,29 +67,12 @@ namespace BookProject.Application.Services
             }
             article.Content = articleModel.Content ?? article.Content;
             article.Title = articleModel.Title ?? article.Title;
-            //int authorId = articleModel.AuthorId;
-            if(articleModel.AuthorId != 0)
-            {
-                article.AuthorId = articleModel.AuthorId;
-            }
-            else
-            {
-                article.AuthorId = article.AuthorId;
-            }
-
-            if(articleModel.MagazineId != 0)
-            {
-                article.MagazineId = articleModel.MagazineId;
-            }
-            else
-            {
-                article.MagazineId = article.MagazineId;
-            }
+            //article.MagazineId = articleModel.MagazineId ?? article.MagazineId;
 
             return await _articleRepository.UpdateAsync(article);
         }
 
-        public async Task<Article> DeleteAsync(int id)
+        public async Task<Article> DeleteAsync(Guid id)
         {
             return await _articleRepository.DeleteAsync(id);
         }

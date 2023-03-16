@@ -7,6 +7,8 @@ using AutoMapper;
 using BookProject.Application.Mapper;
 
 using BookProject.Application.Validation.ArticleValidation;
+using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookProject.Controllers
 {
@@ -32,17 +34,14 @@ namespace BookProject.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            if(id <= 0) 
-            {
-                return BadRequest("Invalid article ID");
-            }
+            
             var article = await _articleService.GetByIdAsync(id);
             
             if(article == null)
             {
-                return NotFound();
+                return BadRequest("Invalid ID");
             }
             var articleModel = mapper.Map<ArticleModel>(article); 
             return Ok(articleModel);
@@ -67,7 +66,7 @@ namespace BookProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleModel article)
+        public async Task<IActionResult> Create(ArticleResponse article)
         {
             if(article==null)
             {
@@ -80,13 +79,13 @@ namespace BookProject.Controllers
             }
             
             var newArticle = await _articleService.AddAsync(article);
-            var articleResponse = mapper.Map<ArticleModel>(newArticle);
+            var articleResponse = mapper.Map<ArticleResponse>(newArticle);
 
-            return Ok(articleResponse);
+            return Ok(newArticle);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ArticleModel article)
+        public async Task<IActionResult> Update(Guid id, ArticleModel article)
         {
             if(!ModelState.IsValid)
             {
@@ -100,7 +99,7 @@ namespace BookProject.Controllers
             }
             var updatedArticleModel = new ArticleModel
             {
-                id = existingArticle.id,
+                Id = existingArticle.Id,
                 Title = article.Title,
                 Content=article.Content,
                 AuthorId=article.AuthorId,
@@ -119,7 +118,7 @@ namespace BookProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var existingArticle = await _articleService.GetByIdAsync(id);
             if(existingArticle == null)
