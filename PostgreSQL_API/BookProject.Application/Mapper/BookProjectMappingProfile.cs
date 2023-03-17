@@ -15,9 +15,8 @@ namespace BookProject.Application.Mapper
             CreateMap<Magazine, MagazineModel>().ReverseMap();
             CreateMap<User, UserResponse>().ReverseMap();
             CreateMap<Article, ArticleResponse>().ReverseMap();
-            CreateMap<Article, ArticleResponse>().ReverseMap();
             CreateMap<ArticleResponse, ArticleJoinModel>().ReverseMap();
-            CreateMap<ArticleResonseNames, ArticleJoinModel>().ReverseMap();
+            CreateMap<ArticleResponseNames, ArticleJoinModel>().ReverseMap();
             CreateMap<Magazine, MagazineResponse>().ReverseMap();
             CreateMap<Order, OrderModel>().ReverseMap();
             CreateMap<OrderModel, OrderResponse>().ReverseMap();

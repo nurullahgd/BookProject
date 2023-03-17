@@ -29,7 +29,7 @@ namespace BookProject.Application.Services
             return await _orderRepository.GetAllAsync();
         }
 
-        public async Task<Order> AddAsync(OrderResponse orderModel)
+        public async Task<Order> AddAsync(OrderModel orderModel)
         {
             var order = new Order
             {
@@ -51,17 +51,22 @@ namespace BookProject.Application.Services
                 // Kullanıcı bulunamadı
                 return null;
             }
-
-            if(orderModel.CreatedDate !=default)
+            if(orderModel.AccountId==null)
             {
-                order.CreatedDate = orderModel.CreatedDate;
+                order.AccountId = order.AccountId;
             }
             else
             {
-                order.CreatedDate = order.CreatedDate;
+                order.AccountId = orderModel.AccountId;
             }
-            
-            
+            if(orderModel.ArticleId==null)
+            {
+                order.ArticleId = order.ArticleId;
+            }
+            else
+            {
+                order.ArticleId = orderModel.ArticleId;
+            }
             return await _orderRepository.UpdateAsync(order);
         }
 

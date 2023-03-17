@@ -20,12 +20,10 @@ namespace BookProject.Controllers
         private readonly IMagazineService _magazineService;
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly MagazineAddValidator _magazineValidator;
-        private readonly MagazineUpdateValidator _magazineUpdateValidator;
         public MagazineController(IMagazineService magazineservice)
         {
             _magazineService = magazineservice;
             _magazineValidator = new MagazineAddValidator(_magazineService);
-            _magazineUpdateValidator = new MagazineUpdateValidator(_magazineService);
         }
 
         [HttpGet("{id}")]
@@ -90,11 +88,6 @@ namespace BookProject.Controllers
                 Id = existingMagazine.Id,
                 Name = magazine.Name
             };
-            var validationResult = await _magazineUpdateValidator.ValidateAsync(magazine);
-            if(!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
             var updatedMagazine = await _magazineService.UpdateAsync(updatedMagazineModel);
 
             return Ok(updatedMagazine);

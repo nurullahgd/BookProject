@@ -20,15 +20,13 @@ namespace BookProject.Controllers
         private readonly IArticleService _articleService;
         private readonly IOrderService _orderService;
         private readonly OrderAddValidator _orderAddValidator;
-        private readonly OrderUpdateValidator _orderUpdateValidator;
-        private readonly IUserService _userService;
-        public OrderController(IOrderService orderservice,IUserService userservice, IArticleService articleService)
+        private readonly IAccountService _accountService;
+        public OrderController(IOrderService orderservice, IAccountService accountService, IArticleService articleService)
         {
             _orderService = orderservice;
-            _userService = userservice;
+            _accountService = accountService;
             _articleService = articleService;
-            _orderAddValidator = new OrderAddValidator(_orderService,_articleService,_userService);
-            _orderUpdateValidator= new OrderUpdateValidator(_orderService, _articleService, _userService);
+            _orderAddValidator = new OrderAddValidator(_orderService,_articleService, _accountService);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)
@@ -51,7 +49,7 @@ namespace BookProject.Controllers
             return Ok(orderResponses);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(OrderResponse order)
+        public async Task<IActionResult> Create(OrderModel order)
         {
             if(order == null)
             {
@@ -64,8 +62,8 @@ namespace BookProject.Controllers
             }
 
             var newOrder = await _orderService.AddAsync(order);
-            //var orderResponse = mapper.Map<OrderModel>(newOrder);
-            return Ok(newOrder);
+            var orderResponse = mapper.Map<OrderModel>(newOrder);
+            return Ok(orderResponse);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, OrderModel order)
@@ -87,11 +85,6 @@ namespace BookProject.Controllers
                 AccountId=order.AccountId,
                 CreatedDate=order.CreatedDate
             };
-            var validationResult = await _orderUpdateValidator.ValidateAsync(order);
-            if(!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
 
             var updatedOrder = await _orderService.UpdateAsync(updatedOrderModel);
             var orderResponse = mapper.Map<OrderModel>(updatedOrder);

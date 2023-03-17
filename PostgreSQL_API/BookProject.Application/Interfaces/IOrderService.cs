@@ -12,7 +12,7 @@ namespace BookProject.Application.Interfaces
     {
         Task<Order> GetByIdAsync(Guid id);
         Task<IEnumerable<Order>> GetAllAsync();
-        Task<Order> AddAsync(OrderResponse user);
+        Task<Order> AddAsync(OrderModel user);
         Task<Order> UpdateAsync(OrderModel user);
         Task<Order> DeleteAsync(Guid id);
     }

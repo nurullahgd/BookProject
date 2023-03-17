@@ -43,7 +43,7 @@ namespace BookProject.Application.Services
         }
         
 
-        public async Task<Article> AddAsync(ArticleResponse articleModel)
+        public async Task<Article> AddAsync(ArticleModel articleModel)
         {
             var article = new Article
             {
@@ -67,7 +67,27 @@ namespace BookProject.Application.Services
             }
             article.Content = articleModel.Content ?? article.Content;
             article.Title = articleModel.Title ?? article.Title;
+            if(articleModel.MagazineId==null)
+            {
+                article.MagazineId = article.MagazineId;
+            }
+            else
+            {
+                article.MagazineId = articleModel.MagazineId;
+            }
+            if(articleModel.AuthorId==null)
+            {
+                article.AuthorId = article.AuthorId;
+            }
+            else
+            {
+                article.AuthorId = articleModel.AuthorId;
+            }
+             
+
+
             //article.MagazineId = articleModel.MagazineId ?? article.MagazineId;
+
 
             return await _articleRepository.UpdateAsync(article);
         }

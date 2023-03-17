@@ -2,7 +2,7 @@
 
 namespace BookProject.Application.Models
 {
-    public class ArticleResonseNames
+    public class ArticleResponseNames
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

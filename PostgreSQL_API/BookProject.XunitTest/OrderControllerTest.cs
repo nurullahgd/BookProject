@@ -8,68 +8,71 @@ using BookProject.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace BookProject.XunitTest
 {
-    public class ArticleControllerTest
+    public class OrderControllerTest
     {
-        private Mock<IArticleRepository> _mock;
-        private Mock<IMagazineRepository> _mockmagazine;
-        private Mock<IUserRepository> _mockuser;
+        private Mock<IArticleRepository> _articlemock;
+        private Mock<IAccountRepository> _accmock;
+        private Mock<IOrderRepository> _mock;
         private readonly ArticleService _articleservice;
-        private readonly UserService _userservice;
-        private readonly MagazineService _magazineservice;
-        private readonly ArticleController _articlecontroller;
+        private readonly AccountService _accountService;
+        private readonly OrderService _orderService;
+        private readonly OrderController _orderController;
         IMapper mapper = BookProjectMapper.Mapper;
-        public ArticleControllerTest()
+        public OrderControllerTest()
         {
-            _mock = new Mock<IArticleRepository>();
-            _mockmagazine = new Mock<IMagazineRepository>();
-            _mockuser = new Mock<IUserRepository>();
-            _articleservice = new ArticleService(_mock.Object, mapper);
-            _magazineservice = new MagazineService(_mockmagazine.Object);
-            _userservice = new UserService(_mockuser.Object);
-            _articlecontroller = new ArticleController(_userservice, _articleservice, _magazineservice);
+            _mock = new Mock<IOrderRepository>();
+            _accmock = new Mock<IAccountRepository>();
+            _articlemock = new Mock<IArticleRepository>();
+            _articleservice = new ArticleService(_articlemock.Object,mapper);
+            _accountService = new AccountService(_accmock.Object,mapper);
+            _orderService = new OrderService(_mock.Object);
+            _orderController = new OrderController(_orderService,_accountService,_articleservice);
+
         }
         [Fact]
         public void Get_Returns_Correct_Id()
         {
             // arrange
-            var articletoget = FakeData();
+            var ordertoget = FakeData();
             _mock.Setup(y => y.GetByIdAsync(FakeData().Id)).ReturnsAsync(FakeData());
             // act
-            var actionresult = _articlecontroller.Get(FakeData().Id);
+            var actionresult = _orderController.Get(FakeData().Id);
             var okobjectresult = actionresult.Result as OkObjectResult;
 
             // assert
-            var articlemap = mapper.Map<ArticleModel>(articletoget);
+            var articlemap = mapper.Map<OrderModel>(ordertoget);
             Assert.IsType<OkObjectResult>(okobjectresult);
 
 
         }
+
         [Fact]
         public void Get_Returns_Wrong_Id()
         {
             // arrange
             _mock.Setup(y => y.GetByIdAsync(FakeData().Id)).ReturnsAsync(FakeData());
             // act
-            var actionresult = _articlecontroller.Get(Guid.NewGuid());
-            var okobjectresult = actionresult.Result as BadRequestObjectResult;
+            var actionresult = _orderController.Get(Guid.NewGuid());
+            var badRequestObjectResult = actionresult.Result as BadRequestObjectResult;
             // assert
-            Assert.Equal(okobjectresult.StatusCode, (int)HttpStatusCode.BadRequest);
+            Assert.Equal(badRequestObjectResult.StatusCode, (int)HttpStatusCode.BadRequest);
 
         }
-        
+
         [Fact]
         public void GetAll_Returns_Correctly()
         {
             // arrange
             _mock.Setup(y => y.GetAllAsync());
             // act
-            var actionresult = _articlecontroller.GetAll();
+            var actionresult = _orderController.GetAll();
             var okobjectresult = actionresult.Result as OkObjectResult;
 
             // assert
@@ -81,23 +84,23 @@ namespace BookProject.XunitTest
         {
             // arrange
             var added = FakeData();
-            var articlemodel = mapper.Map<ArticleModel>(added);
+            var ordermodel = mapper.Map<OrderModel>(added);
 
-            _mockuser.Setup(x => x.GetByIdAsync(articlemodel.AuthorId))
-                            .ReturnsAsync(new User());
+            _articlemock.Setup(x => x.GetByIdAsync(ordermodel.ArticleId))
+                            .ReturnsAsync(new Article());
 
-            _mockmagazine.Setup(x => x.GetByIdAsync(articlemodel.MagazineId))
-                                .ReturnsAsync(new Magazine());
+            _accmock.Setup(x => x.GetByIdAsync(ordermodel.AccountId))
+                                .ReturnsAsync(new Account());
 
-            _mock.Setup(x => x.GetByIdAsync(articlemodel.Id))
-                               .ReturnsAsync(null as Article);
-            
+            _mock.Setup(x => x.GetByIdAsync(ordermodel.Id))
+                               .ReturnsAsync(null as Order);
+
             _mock.Setup(x => x.AddAsync(added))
                                .ReturnsAsync(added);
 
             // act
             //var mappedarticle = mapper.Map<ArticleResponse>(articlemodel);
-            var actionresult = _articlecontroller.Create(articlemodel);
+            var actionresult = _orderController.Create(ordermodel);
             var okobjectresult = actionresult.Result as OkObjectResult;
 
             // assert
@@ -109,20 +112,18 @@ namespace BookProject.XunitTest
         {
 
             // arrange
-            var articletoupdate = FakeData();
-            articletoupdate.Content = "this is updated content";
+            var ordertoupdate = FakeData();
+            ordertoupdate.CreatedDate = DateTime.ParseExact("12.04.2022", "dd.MM.yyyy", CultureInfo.InvariantCulture);
             _mock.Setup(y => y.GetByIdAsync(FakeData().Id)).ReturnsAsync(FakeData());
-            _mock.Setup(y => y.UpdateAsync(articletoupdate)).ReturnsAsync(articletoupdate);
-            ArticleModel updatedarticlemodel = new ArticleModel { Id = FakeData().Id, Content = "this is updated content" };
+            _mock.Setup(y => y.UpdateAsync(ordertoupdate)).ReturnsAsync(ordertoupdate);
+            OrderModel updatedarticlemodel = new OrderModel { Id = FakeData().Id, CreatedDate = DateTime.ParseExact("12.04.2022", "dd.MM.yyyy", CultureInfo.InvariantCulture) };
 
             // act
-            var actionresult = _articlecontroller.Update(FakeData().Id, updatedarticlemodel);
+            var actionresult = _orderController.Update(FakeData().Id, updatedarticlemodel);
             var okobjectresult = actionresult.Result as OkObjectResult;
 
             // assert
             Assert.IsType<OkObjectResult>(okobjectresult);
-
-
         }
         [Fact]
         public void Delete_Return_Correctly()
@@ -130,7 +131,7 @@ namespace BookProject.XunitTest
             // arrange
             _mock.Setup(y => y.GetByIdAsync(FakeData().Id)).ReturnsAsync(FakeData());
             // act
-            var actionresult = _articlecontroller.Delete(FakeData().Id).Result;
+            var actionresult = _orderController.Delete(FakeData().Id).Result;
 
             // assert
             Assert.IsType<OkObjectResult>(actionresult);
@@ -142,19 +143,19 @@ namespace BookProject.XunitTest
             // arrange
             _mock.Setup(y => y.GetByIdAsync(FakeData().Id)).ReturnsAsync(FakeData());
             // act
-            var actionresult = _articlecontroller.Delete(Guid.NewGuid()).Result;
+            var actionresult = _orderController.Delete(Guid.NewGuid()).Result;
             // assert
             Assert.IsType<BadRequestObjectResult>(actionresult);
         }
-        public Article FakeData()
+        public Order FakeData()
         {
-            return new Article
+            return new Order
             {
                 Id = Guid.Parse("d9227df2-6924-47b3-bd81-b4ed46e5568c"),
-                Title = "test",
-                Content= "test",
-                MagazineId = Guid.Parse("7bde6cdd-bdeb-443a-b040-b058588ee8bb"),
-                AuthorId = Guid.Parse("d2c7cf8e-9545-4cfd-969e-a67766f71c82")
+                AccountId = Guid.Parse("7bde6cdd-bdeb-443a-b040-b058588ee8bb"),
+                ArticleId = Guid.Parse("d2c7cf8e-9545-4cfd-969e-a67766f71c82"),
+                CreatedDate = DateTime.ParseExact("23.04.2002", "dd.MM.yyyy", CultureInfo.InvariantCulture)
+
             };
         }
     }

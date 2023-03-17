@@ -13,7 +13,7 @@ namespace BookProject.Application.Interfaces
         
         Task<Article> GetByIdAsync(Guid id);
         Task<IEnumerable<Article>> GetAllAsync();
-        Task<Article> AddAsync(ArticleResponse article);
+        Task<Article> AddAsync(ArticleModel article);
         Task<Article> UpdateAsync(ArticleModel article);
         Task<Article> DeleteAsync(Guid id);
         IQueryable<ArticleJoinModel> GetArticleWithUserAndMagazine();

@@ -21,7 +21,6 @@ namespace BookProject.Controllers
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IArticleService _articleService;
         private readonly ArticleAddValidator _articleaddValidator;
-        private readonly ArticleUpdateValidator _articleUpdateValidator;
         private readonly IUserService _userService;
         private readonly IMagazineService _magazineService;
         
@@ -31,7 +30,6 @@ namespace BookProject.Controllers
             _userService = userservice;
             _articleService = articleService;
             _articleaddValidator = new ArticleAddValidator(_userService,_articleService,_magazineService);
-            _articleUpdateValidator = new ArticleUpdateValidator(_userService, _articleService, _magazineService);
         }
 
         [HttpGet("{id}")]
@@ -52,7 +50,7 @@ namespace BookProject.Controllers
         public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazineJustName()
         {
             var articles = _articleService.GetArticleWithUserAndMagazine();
-            var response = mapper.Map<List<ArticleResonseNames>>(articles);
+            var response = mapper.Map<List<ArticleResponseNames>>(articles);
             return Ok(response);
         }
 
@@ -60,14 +58,14 @@ namespace BookProject.Controllers
         
         public async Task<IActionResult> GetAll()
         {
-            var articles =  _articleService.GetAllAsync();
-            var response = mapper.Map<List<ArticleModel>>(articles);
-            return Ok(response);
+            var articles = await _articleService.GetAllAsync();
+            //var response = mapper.Map<ArticleModel>(articles);
+            return Ok(articles);
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleResponse article)
+        public async Task<IActionResult> Create(ArticleModel article)
         {
             if(article==null)
             {
@@ -78,12 +76,12 @@ namespace BookProject.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
-            var _msgsender = new ArticleMessageSender();
+            //var _msgsender = new ArticleMessageSender();
             var newArticle = await _articleService.AddAsync(article);
             var articleResponse = mapper.Map<ArticleResponse>(newArticle);
-            var msgsendermap = mapper.Map<Article>(newArticle);
-            _msgsender.SendArticleAddedMessage(msgsendermap);
-            return Ok(newArticle);
+            //var msgsendermap = mapper.Map<Article>(newArticle);
+            //_msgsender.SendArticleAddedMessage(msgsendermap);
+            return Ok(articleResponse);
         }
 
         [HttpPut("{id}")]
@@ -107,13 +105,7 @@ namespace BookProject.Controllers
                 AuthorId=article.AuthorId,
                 MagazineId=article.MagazineId
             };
-            var validationResult = await _articleUpdateValidator.ValidateAsync(article);
-            if(!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-
-
+            
             var updatedArticle = await _articleService.UpdateAsync(updatedArticleModel);
             var articleResponse = mapper.Map<ArticleModel>(updatedArticle);
             return Ok(articleResponse);
