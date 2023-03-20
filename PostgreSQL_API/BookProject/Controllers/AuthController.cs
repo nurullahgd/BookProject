@@ -58,7 +58,7 @@ namespace BookProject.Controllers
             //var test = mapper.Map<AccountResponse>(user);
             if(user == null)
             {
-                return BadRequest("User Not found");
+                return BadRequest("Wrong User or password");
             }
             CreatePasswordHash(request.Password, out byte[] Passwordhash, out byte[] PasswordSalt);
             acc.Username = request.Username;
@@ -66,6 +66,12 @@ namespace BookProject.Controllers
             acc.PasswordSalt = PasswordSalt;
             string token = CreateToken(acc);
             return Ok(token);
+        }
+        [HttpGet("ALL DATA")]
+        public async Task<IActionResult> GetAll()
+        {
+            var data = await _accountService.GetAllAsync();
+            return Ok(data);
         }
 
         private string CreateToken(AccountHashes acc)

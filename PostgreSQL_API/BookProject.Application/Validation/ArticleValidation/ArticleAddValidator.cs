@@ -24,19 +24,19 @@ namespace BookProject.Application.Validation.ArticleValidation
 
             RuleFor(a => a.Title).NotEmpty().WithMessage("Title is Required");
 
-            //RuleFor(a => a.MagazineId)
-            //    .NotEmpty().WithMessage("Magazine is required")
-            //    .MustAsync(async (id, cancellationToken) =>
-            //    {
-            //        var magazine = await _articleService.GetByIdAsync(id);
-            //        return magazine != null;
-            //    }).WithMessage("Magazine not found");
+            RuleFor(a => a.MagazineId)
+                .NotEmpty().WithMessage("Magazine is required")
+                .MustAsync(async (id, cancellationToken) =>
+                {
+                    var magazine = await _magazineService.GetByIdAsync(id);
+                    return magazine != null;
+                }).WithMessage("Magazine not found");
 
             RuleFor(a => a.AuthorId)
                 .NotEmpty().WithMessage("Author is required")
                 .MustAsync(async (id, cancellationToken) =>
                 {
-                    var magazine = await _articleService.GetByIdAsync(id);
+                    var magazine = await _userService.GetByIdAsync(id);
                     return magazine != null;
                 }).WithMessage("Author not found");
         }

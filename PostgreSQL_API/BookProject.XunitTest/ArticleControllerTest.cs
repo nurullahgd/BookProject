@@ -81,15 +81,15 @@ namespace BookProject.XunitTest
         {
             // arrange
             var added = FakeData();
-            var articlemodel = mapper.Map<ArticleModel>(added);
+            
 
-            _mockuser.Setup(x => x.GetByIdAsync(articlemodel.AuthorId))
+            _mockuser.Setup(x => x.GetByIdAsync(added.AuthorId))
                             .ReturnsAsync(new User());
 
-            _mockmagazine.Setup(x => x.GetByIdAsync(articlemodel.MagazineId))
+            _mockmagazine.Setup(x => x.GetByIdAsync(added.MagazineId))
                                 .ReturnsAsync(new Magazine());
 
-            _mock.Setup(x => x.GetByIdAsync(articlemodel.Id))
+            _mock.Setup(x => x.GetByIdAsync(added.Id))
                                .ReturnsAsync(null as Article);
             
             _mock.Setup(x => x.AddAsync(added))
@@ -97,6 +97,7 @@ namespace BookProject.XunitTest
 
             // act
             //var mappedarticle = mapper.Map<ArticleResponse>(articlemodel);
+            var articlemodel = mapper.Map<ArticleModel>(added);
             var actionresult = _articlecontroller.Create(articlemodel);
             var okobjectresult = actionresult.Result as OkObjectResult;
 
