@@ -5,11 +5,8 @@ using System.Collections.Generic;
 using BookProject.Application.Models;
 using AutoMapper;
 using BookProject.Application.Mapper;
-using BookProject.Data.Messages;
 using BookProject.Application.Validation.ArticleValidation;
 using System;
-using Microsoft.AspNetCore.Authorization;
-using BookProject.Data.Entities;
 
 namespace BookProject.Controllers
 {
@@ -45,9 +42,9 @@ namespace BookProject.Controllers
             var articleModel = mapper.Map<ArticleModel>(article); 
             return Ok(articleModel);
         }
-        
+
         [HttpGet]
-        public async Task<ActionResult<List<ArticleResponse>>> GetArticleWithUserAndMagazineJustName()
+        public ActionResult<List<ArticleResponse>> GetArticleWithUserAndMagazineJustName()
         {
             var articles = _articleService.GetArticleWithUserAndMagazine();
             var response = mapper.Map<List<ArticleResponseNames>>(articles);

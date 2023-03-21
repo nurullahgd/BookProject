@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentValidation;
-using System.Text;
-using System.Threading.Tasks;
-using BookProject.Data.Entities;
+﻿using FluentValidation;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Models;
 

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace BookProject.Application.Models
 {

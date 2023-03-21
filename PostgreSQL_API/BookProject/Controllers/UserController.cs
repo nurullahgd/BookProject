@@ -6,7 +6,6 @@ using AutoMapper;
 using BookProject.Application.Mapper;
 using BookProject.Application.Validation.UserValidation;
 using BookProject.Data;
-using BookProject.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using System;
 

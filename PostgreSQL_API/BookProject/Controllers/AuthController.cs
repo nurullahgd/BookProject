@@ -1,12 +1,10 @@
 ﻿using BookProject.Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +28,7 @@ namespace BookProject.Controllers
         {
             _configuration = configuration;
             _accountService = accountService;
+            _accountValidator = new AccountValidator(_accountService);
         }
         public static AccountHashes acc = new AccountHashes();
         private readonly IConfiguration _configuration;

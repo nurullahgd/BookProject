@@ -1,5 +1,4 @@
-﻿using BookProject.Data.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 namespace BookProject.Data.Entities
 {

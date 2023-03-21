@@ -9,14 +9,10 @@ using Microsoft.OpenApi.Models;
 using BookProject.Data.Repositories;
 using BookProject.Application.Interfaces;
 using BookProject.Application.Services;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Newtonsoft;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace BookProject
 {

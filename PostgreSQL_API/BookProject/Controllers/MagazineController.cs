@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using BookProject.Application.Models;
 using BookProject.Application.Mapper;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using BookProject.Application.Validation.MagazineValidation;
 using System;
 
