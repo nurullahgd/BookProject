@@ -80,7 +80,7 @@ namespace BookProject.XunitTest
 
         }
         [Fact]
-        public async Task Create_Return_Correctly()
+        public void Create_Return_Correctly()
         {
             // arrange
             var added = FakeData();

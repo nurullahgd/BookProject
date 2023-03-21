@@ -14,7 +14,7 @@ namespace BookProject.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
         IMapper mapper = BookProjectMapper.Mapper;

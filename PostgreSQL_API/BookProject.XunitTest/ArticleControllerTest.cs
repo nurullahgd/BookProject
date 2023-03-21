@@ -77,11 +77,11 @@ namespace BookProject.XunitTest
 
         }
         [Fact]
-        public async Task Create_Return_Correctly()
+        public void Create_Return_Correctly()
         {
             // arrange
             var added = FakeData();
-            
+
 
             _mockuser.Setup(x => x.GetByIdAsync(added.AuthorId))
                             .ReturnsAsync(new User());
@@ -91,7 +91,7 @@ namespace BookProject.XunitTest
 
             _mock.Setup(x => x.GetByIdAsync(added.Id))
                                .ReturnsAsync(null as Article);
-            
+
             _mock.Setup(x => x.AddAsync(added))
                                .ReturnsAsync(added);
 

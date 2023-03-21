@@ -16,9 +16,10 @@ namespace Ocelot.ApiGateway
 {
     public class Startup
     {
+        private readonly IConfiguration _cfg;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _cfg = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -26,13 +27,25 @@ namespace Ocelot.ApiGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
+            var authenticationProviderKey = "5acaa3e6-edee-4b08-9b77-54e06a885a13";
+            services.AddAuthentication()
+               .AddJwtBearer(authenticationProviderKey, x =>
+               {
+                   
+                   x.RequireHttpsMetadata = false;
+                   x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                   {
+                       ValidAudiences = new[] { "orders", "basket", "locations", "marketing", "mobileshoppingagg", "webshoppingagg" }
+                   };
+               });
 
             services.AddControllers();
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ocelot.ApiGateway", Version = "v1" });
             //});
-            services.AddOcelot(Configuration);
+            services.AddOcelot(_cfg);
             
         }
 
