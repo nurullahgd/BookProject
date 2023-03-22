@@ -51,11 +51,10 @@ namespace BookProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AccountResponse request)
         {
-            var validationResult =  _accountLoginValidator.Validate(request);
+            var validationResult = _accountLoginValidator.Validate(request);
             if(!validationResult.IsValid) return BadRequest(validationResult.Errors);
-            var user = await _accountService.FindUsernameAndPassword(request.Username,request.Password);
-            
-            if(user == null) return BadRequest("Wrong User or password");
+            var user = await _accountService.FindPassword(request.Username, request.Password);
+            if(user == null) return BadRequest("Wrong password");
             acc.Username = request.Username;
             string token = CreateToken(acc);
             return Ok(token);

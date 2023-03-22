@@ -20,9 +20,9 @@ namespace BookProject.Application.Services
             _accountRepository = accountRepository;
             _mapper = mapper;
         }
-        public async Task<Account> FindUsernameAndPassword(string username, string password)
+        public async Task<Account> FindPassword(string username, string password)
         {
-            return await _accountRepository.FindUsernameAndPassword(username, password);
+            return await _accountRepository.FindPassword(username, password);
         }
         public async Task<Account> GetByNameAsync(string username)
         {

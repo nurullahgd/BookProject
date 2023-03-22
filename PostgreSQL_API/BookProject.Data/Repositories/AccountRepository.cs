@@ -13,12 +13,12 @@ namespace BookProject.Data.Repositories
         {
             _context = context;
         }
-        public async Task<Account> FindUsernameAndPassword(string username, string password)
+        public async Task<Account> FindPassword(string username, string password)
         {
 
             var account = _context.Set<Account>().FirstOrDefaultAsync(x => x.Username == username).Result;
             bool isValidPassword = BCrypt.Net.BCrypt.Verify(password, account.Password);
-            if(account != null && isValidPassword)
+            if(isValidPassword)
             {
                 return account;
             }
@@ -47,7 +47,7 @@ namespace BookProject.Data.Repositories
 
     public interface IAccountRepository : IRepository<Account>
     {
-        Task<Account> FindUsernameAndPassword(string username, string password);
+        Task<Account> FindPassword(string username, string password);
         Task<Account> GetbyNameAsync(string username);
         Task<Account> Register(Account accountResponse);
     }

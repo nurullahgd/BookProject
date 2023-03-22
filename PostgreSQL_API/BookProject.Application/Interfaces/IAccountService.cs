@@ -15,7 +15,7 @@ namespace BookProject.Application.Interfaces
         Task<Account> AddAsync(AccountResponse accountResponse);
         Task<Account> UpdateAsync(AccountModel accountModel);
         Task<Account> DeleteAsync(Guid id);
-        Task<Account> FindUsernameAndPassword(string username,string password);
+        Task<Account> FindPassword(string username,string password);
         Task<Account> GetByNameAsync(string username);
         Task<Account> Register(Account accountResponse);
     }
