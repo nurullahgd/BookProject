@@ -1,4 +1,5 @@
-﻿using BookProject.Data.Entities;
+﻿using BCrypt.Net;
+using BookProject.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -16,8 +17,8 @@ namespace BookProject.Data.Repositories
         {
 
             var account = _context.Set<Account>().FirstOrDefaultAsync(x => x.Username == username).Result;
-
-            if(account != null && account.Password == password)
+            bool isValidPassword = BCrypt.Net.BCrypt.Verify(password, account.Password);
+            if(account != null && isValidPassword)
             {
                 return account;
             }
@@ -32,6 +33,13 @@ namespace BookProject.Data.Repositories
             }
             return null;
         }
+        public async Task<Account> Register(Account accountResponse)
+        {
+            var check = await _context.Set<Account>().SingleOrDefaultAsync(x => x.Username == accountResponse.Username);
+            if(check != null) return accountResponse;
+            return null;
+            
+        }
 
 
     }
@@ -41,6 +49,7 @@ namespace BookProject.Data.Repositories
     {
         Task<Account> FindUsernameAndPassword(string username, string password);
         Task<Account> GetbyNameAsync(string username);
+        Task<Account> Register(Account accountResponse);
     }
 
 }

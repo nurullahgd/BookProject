@@ -20,9 +20,9 @@ namespace BookProject.Application.Services
             _accountRepository = accountRepository;
             _mapper = mapper;
         }
-        public async Task<Account> FindUsernameAndPassword(string username,string password)
+        public async Task<Account> FindUsernameAndPassword(string username, string password)
         {
-            return await _accountRepository.FindUsernameAndPassword(username,password);
+            return await _accountRepository.FindUsernameAndPassword(username, password);
         }
         public async Task<Account> GetByNameAsync(string username)
         {
@@ -39,13 +39,23 @@ namespace BookProject.Application.Services
             return await _accountRepository.GetAllAsync();
         }
 
+        //public async Task<Account> Login(AccountResponse accountResponse)
+        //{
+        //    var account = _accountRepository.FindUsernameAndPassword(accountResponse.Username,accountResponse.Password);
+        //    bool isValidPassword = BCrypt.Net.BCrypt.Verify(account.pas, accountResponse.Password);
+        //}
+        public async Task<Account> Register(Account account)
+        {
 
+            return await _accountRepository.Register(account);
+        }
         public async Task<Account> AddAsync(AccountResponse accountResponse)
         {
+            //accountResponse.Password= BCrypt.Net.BCrypt.HashPassword(accountResponse.Password);
             var account = new Account
             {
                 Username = accountResponse.Username,
-                Password = accountResponse.Password
+                Password = BCrypt.Net.BCrypt.HashPassword(accountResponse.Password)
             };
 
             return await _accountRepository.AddAsync(account);

@@ -18,7 +18,8 @@ namespace BookProject.Application.Validation.AccountValidation
                     return account == null;
                 }).WithMessage("Username is already taken");
 
-            RuleFor(a => a.Password).NotEmpty().WithMessage("Password is required");
+            RuleFor(a => a.Password).NotEmpty().WithMessage("Password is required")
+                .MinimumLength(3).WithMessage("Minimum Lenght 3!");
         }
     }
 }
