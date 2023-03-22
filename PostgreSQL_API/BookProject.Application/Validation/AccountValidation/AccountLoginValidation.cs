@@ -15,8 +15,14 @@ namespace BookProject.Application.Validation.AccountValidation
         public AccountLoginValidation(IAccountService accountService)
         {
             _accountService = accountService;
+
+            RuleFor(a => a.Username).NotEmpty().WithMessage("Username is required")
+                .MustAsync(async (username, cancellationToken) =>
+                 {
+                     var account = await _accountService.GetByNameAsync(username);
+                     return account != null;
+                 }).WithMessage("User not found");
             RuleFor(a => a.Password).NotEmpty().WithMessage("Password is required");
-            RuleFor(a => a.Username).NotEmpty().WithMessage("Username is required");
         }
     }
 }
