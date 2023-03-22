@@ -24,56 +24,50 @@ namespace BookProject.Controllers
         IMapper mapper = BookProjectMapper.Mapper;
         private readonly IAccountService _accountService;
         private readonly AccountValidator _accountValidator;
+        private readonly AccountLoginValidation _accountLoginValidator;
         public AuthController(IConfiguration configuration, IAccountService accountService)
         {
             _configuration = configuration;
             _accountService = accountService;
             _accountValidator = new AccountValidator(_accountService);
+            _accountLoginValidator = new AccountLoginValidation(_accountService);
         }
-        public static AccountHashes acc = new AccountHashes();
+        public static Account acc = new Account();
         private readonly IConfiguration _configuration;
 
-        [HttpPost("register")]
-        public async Task<ActionResult<AccountHashes>> Register(AccountResponse request)
+        [HttpPost]
+        public async Task<IActionResult> Register(AccountResponse request)
         {
+
             var validationResult = await _accountValidator.ValidateAsync(request);
-            if(!validationResult.IsValid)
-            {
-                return BadRequest(validationResult.Errors);
-            }
-            if(request == null)
-            {
-                return BadRequest("User information is missing.");
-            }
+            if(!validationResult.IsValid) return BadRequest(validationResult.Errors);
+
+            if(request == null) return BadRequest("User information is missing.");
             var newacc = await _accountService.AddAsync(request);
             return Ok(newacc);
         }
 
 
-        [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(AccountResponse request)
+        [HttpPost]
+        public async Task<IActionResult> Login(AccountResponse request)
         {
+            var validationResult =  _accountLoginValidator.Validate(request);
+            if(!validationResult.IsValid) return BadRequest(validationResult.Errors);
             var user = await _accountService.FindUsernameAndPassword(request.Username,request.Password);
-            //var test = mapper.Map<AccountResponse>(user);
-            if(user == null)
-            {
-                return BadRequest("Wrong User or password");
-            }
-            CreatePasswordHash(request.Password, out byte[] Passwordhash, out byte[] PasswordSalt);
+            
+            if(user == null) return BadRequest("Wrong User or password");
             acc.Username = request.Username;
-            acc.PasswordHash = Passwordhash;
-            acc.PasswordSalt = PasswordSalt;
             string token = CreateToken(acc);
             return Ok(token);
         }
-        [HttpGet("ALL DATA")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var data = await _accountService.GetAllAsync();
             return Ok(data);
         }
 
-        private string CreateToken(AccountHashes acc)
+        private string CreateToken(Account acc)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -87,23 +81,6 @@ namespace BookProject.Controllers
                 signingCredentials: creds);
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
-        }
-        private void CreatePasswordHash(string password, out byte[] Passwordhash, out byte[] PasswordSalt)
-        {
-            using(var hmac = new HMACSHA512())
-            {
-                PasswordSalt = hmac.Key;
-                Passwordhash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] Passwordhash, byte[] PasswordSalt)
-        {
-            using(var hmac = new HMACSHA512(PasswordSalt))
-            {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computeHash.SequenceEqual(Passwordhash);
-            }
         }
 
     }
