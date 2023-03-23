@@ -7,6 +7,9 @@ using AutoMapper;
 using BookProject.Application.Mapper;
 using BookProject.Application.Validation.ArticleValidation;
 using System;
+using BookProject.Data.Messages;
+using BookProject.Data.Entities;
+using Newtonsoft.Json;
 
 namespace BookProject.Controllers
 {
@@ -73,11 +76,17 @@ namespace BookProject.Controllers
             {
                 return BadRequest(validationResult.Errors);
             }
-            //var _msgsender = new ArticleMessageSender();
+            var _msgsender = new ArticleMessageSender();
             var newArticle = await _articleService.AddAsync(article);
             var articleResponse = mapper.Map<ArticleResponse>(newArticle);
-            //var msgsendermap = mapper.Map<Article>(newArticle);
-            //_msgsender.SendArticleAddedMessage(msgsendermap);
+            var msgsendermap = mapper.Map<Article>(newArticle);
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            var message = JsonConvert.SerializeObject(msgsendermap, settings);
+            //var test = mapper.Map<Article>(message);
+            _msgsender.SendArticleAddedMessage(message);
             return Ok(articleResponse);
         }
 

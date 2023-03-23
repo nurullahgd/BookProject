@@ -12,7 +12,7 @@
       "UpstreamPathTemplate": "/gateway/{Controller}/{ActionName}",
       "UpstreamHttpMethod": [],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "5acaa3e6-edee-4b08-9b77-54e06a885a13",
+        //"AuthenticationProviderKey": "5acaa3e6-edee-4b08-9b77-54e06a885a13",
         "AllowedScopes": []
       }
     }

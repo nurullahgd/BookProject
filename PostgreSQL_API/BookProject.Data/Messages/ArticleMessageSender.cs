@@ -8,7 +8,7 @@ namespace BookProject.Data.Messages
 {
     public class ArticleMessageSender
     {
-        public void SendArticleAddedMessage(Article article)
+        public void SendArticleAddedMessage(string article)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
 
@@ -21,15 +21,15 @@ namespace BookProject.Data.Messages
                                      autoDelete: false,
                                      arguments: null);
 
-                var json = JsonConvert.SerializeObject(article);
-                var body = Encoding.UTF8.GetBytes(json);
+                //var json = JsonConvert.SerializeObject(article);
+                var body = Encoding.UTF8.GetBytes(article);
 
                 channel.BasicPublish(exchange: "",
                                      routingKey: "article-added-queue",
                                      basicProperties: null,
                                      body: body);
 
-                Console.WriteLine("Sent {0}", json);
+                Console.WriteLine("Sent {0}", article);
             }
         }
 

@@ -9,5 +9,6 @@ namespace BookProject.Application.Models
         public string Content { get; set; }
         public Guid MagazineId { get; set; }
         public Guid AuthorId { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }
