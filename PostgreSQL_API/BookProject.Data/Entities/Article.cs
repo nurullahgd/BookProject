@@ -11,5 +11,6 @@ namespace BookProject.Data.Entities
         public Magazine Magazine { get; set; }
         public Guid AuthorId { get; set; }
         public User Author { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

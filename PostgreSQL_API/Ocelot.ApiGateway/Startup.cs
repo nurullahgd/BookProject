@@ -22,17 +22,14 @@ namespace Ocelot.ApiGateway
         public void ConfigureServices(IServiceCollection services)
         {
             
-            var authenticationProviderKey = "5acaa3e6-edee-4b08-9b77-54e06a885a13";
-            services.AddAuthentication()
-               .AddJwtBearer(authenticationProviderKey, x =>
-               {
+            //var authenticationProviderKey = "HGgypZtVCeL2LJ0wpGhzmOJe/ljMkIb+vtBtJSlgiEs=";
+            //services.AddAuthentication()
+            //   .AddJwtBearer(authenticationProviderKey, x =>
+            //   {
                    
-                   x.RequireHttpsMetadata = false;
-                   x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-                   {
-                       ValidAudiences = new[] { "orders", "basket", "locations", "marketing", "mobileshoppingagg", "webshoppingagg" }
-                   };
-               });
+            //       x.RequireHttpsMetadata = false;
+                   
+            //   });
 
             services.AddControllers();
             //services.AddSwaggerGen(c =>

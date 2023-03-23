@@ -47,7 +47,8 @@ namespace BookProject.Application.Services
                 Title = articleModel.Title,
                 Content = articleModel.Content,
                 AuthorId = articleModel.AuthorId,
-                MagazineId = articleModel.MagazineId
+                MagazineId = articleModel.MagazineId,
+                CreatedTime = DateTime.Now
             };
 
             return await _articleRepository.AddAsync(article);
