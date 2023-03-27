@@ -25,6 +25,7 @@ Bu proje, aşağıdaki teknolojileri kullanarak geliştirilmiştir:
 * Generic Repository Pattern
 * Code First Migrations
 * Entity Framework
+* Jwt Token
 
 # Projenin Yapısı
 
