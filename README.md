@@ -1,6 +1,6 @@
 # BookProject
 
-Bu proje, .NET Core 5 kullanılarak yazılmış bir mikro servis mimarisi projesidir. Projede API Gateway, validasyon işlemleri, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
+Bu proje, .NET Core 5 kullanılarak yazılmış bir 2 katmanlı mimari ile oluşturulmuş proejedir. Projede API Gateway, Fluent Validation, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
 
 # Başlarken
 
@@ -37,10 +37,11 @@ Bu proje, aşağıdaki teknolojileri kullanarak geliştirilmiştir:
 * Code First Migrations
 * Entity Framework
 * Jwt Token
+* Fluent Validation
 
 # Projenin Yapısı
 
-Bu projede, farklı mikroservisler bir araya getirilerek oluşturulmuştur. BookService mikroservisi, kitap verilerini saklamakla sorumludur. UserService mikroservisi, kullanıcı verilerini saklamakla sorumludur. ApiGateway mikroservisi, istekleri yönlendirerek ilgili servislere gönderir. Ayrıca, veri doğrulama işlemleri de burada yapılmaktadır.
+Bu projede, farklı mikroservisler bir araya getirilerek oluşturulmuştur. BookService , kitap verilerini saklamakla sorumludur. AccountService , kullanıcı verilerini saklamakla sorumludur. ApiGateway, istekleri yönlendirerek ilgili servislere gönderir. Ayrıca, veri doğrulama işlemleri de burada yapılmaktadır.
 
 Proje, Generic Repository Pattern kullanarak veri işlemlerini gerçekleştirir. Ayrıca, Dependency Injection kullanarak bağımlılıkları yönetir.
 
