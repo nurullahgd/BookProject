@@ -1,6 +1,6 @@
 # BookProject
 
-Bu proje, .NET Core 5 kullanılarak yazılmış bir 2 katmanlı mimari ile oluşturulmuş proejedir. Projede API Gateway, Fluent Validation, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
+Bu proje, .NET Core 5 kullanılarak yazılmış bir N katmanlı mimari ile oluşturulmuş proejedir. Projede API Gateway, Fluent Validation, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
 
 # Başlarken
 
