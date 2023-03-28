@@ -1,16 +1,28 @@
 # BookProject
 
-Bu proje, .NET Core 5 ile yazılmış mikroservis mimarisi temelli bir web uygulamasıdır. API Gateway, Redis, RabbitMQ gibi teknolojileri kullanarak, kitap verilerinin saklanması ve yönetilmesini sağlar.
+Bu proje, .NET Core 5 kullanılarak yazılmış bir mikro servis mimarisi projesidir. Projede API Gateway, validasyon işlemleri, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
 
 # Başlarken
 
-Bu proje, .NET Core 5 ve PostgreSQL veritabanı kullanılarak geliştirilmiştir. Aşağıdaki adımları izleyerek projeyi yerel bilgisayarınızda çalıştırabilirsiniz:
+Bu projeyi çalıştırmak için aşağıdaki gereksinimlere ihtiyacınız olacaktır:
 
-1. Bu depoyu klonlayın.
-2. PostgreSQL veritabanı kurulumu yapın.
-3. appsettings.json dosyasında veritabanı bağlantı ayarlarınızı yapın.
-4. dotnet ef database update komutunu kullanarak veritabanınızı oluşturun.
-5. Projenizi çalıştırın.
+* .NET Core 5 SDK
+* PostgreSQL veritabanı
+* RabbitMQ mesajlaşma aracı
+
+Ayrıca, projenin çalışması için gerekli olan diğer bağımlılıklar, projenin ana dizinindeki BookProject.sln dosyasında yer alan .csproj dosyalarında listelenmiştir. Bu bağımlılıklar, ilk kez çalıştırdığınızda projenin otomatik olarak yüklenmesi için .NET Core CLI veya Visual Studio ile yapılandırılabilir.
+
+# Kurulum
+
+1. Bu projeyi GitHub'dan indirin veya kopyalayın.
+2. appsettings.json dosyasında PostgreSQL ve RabbitMQ ayarlarınızı yapın.
+3. Komut satırından proje ana dizinine gidin.
+4. Projenin bağımlılıklarını yüklemek için aşağıdaki komutu çalıştırın:
+dotnet restore
+5. Veritabanını oluşturmak için aşağıdaki komutu çalıştırın:
+dotnet ef database update
+6. Projeyi çalıştırın
+7. Proje varsayılan olarak http://localhost:5000 adresinde çalışacaktır.
 
 # Kullanılan Teknolojiler
 
@@ -18,7 +30,6 @@ Bu proje, aşağıdaki teknolojileri kullanarak geliştirilmiştir:
 
 * .NET Core 5
 * API Gateway (Ocelot)
-* Redis
 * RabbitMQ
 * xUnit
 * Dependency Injection
@@ -33,7 +44,15 @@ Bu projede, farklı mikroservisler bir araya getirilerek oluşturulmuştur. Book
 
 Proje, Generic Repository Pattern kullanarak veri işlemlerini gerçekleştirir. Ayrıca, Dependency Injection kullanarak bağımlılıkları yönetir.
 
-
 # Testler
 
 Bu proje, xUnit test kütüphanesi kullanılarak test edilmiştir. Testler, veri işlemlerinin doğru çalıştığından emin olmak için yazılmıştır.
+
+
+# Katkıda Bulunma
+
+Bu projeye katkıda bulunmak isterseniz, lütfen pull request gönderin veya issue oluşturun. İletişim bilgilerim aşağıdadır.
+
+# İletişim
+E-posta: nurullahgundogdu02@gmail.com
+
