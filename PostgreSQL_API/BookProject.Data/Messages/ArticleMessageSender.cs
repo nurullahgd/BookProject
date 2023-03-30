@@ -2,7 +2,6 @@
 using System.Text;
 using RabbitMQ.Client;
 using BookProject.Data.Entities;
-using Newtonsoft.Json;
 
 namespace BookProject.Data.Messages
 {

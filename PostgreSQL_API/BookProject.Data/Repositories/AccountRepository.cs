@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using BookProject.Data.Entities;
+﻿using BookProject.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
