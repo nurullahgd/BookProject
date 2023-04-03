@@ -1,6 +1,6 @@
 # BookProject
 
-Bu proje, .NET Core 5 kullanılarak yazılmış bir N katmanlı mimari ile oluşturulmuş proejedir. Projede API Gateway, Fluent Validation, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projenin PostgreSQL veritabanı kullanmaktadır.
+Bu proje, .NET Core 5 kullanılarak yazılmış bir N katmanlı mimari ile oluşturulmuş projedir. Projede API Gateway, Fluent Validation, JWT Token, AutoMapper, Mock, RabbitMQ, XUnit, Dependency Injection, Generic Repository Pattern, Code First Migrations ve Entity Framework teknolojileri kullanılmıştır. Projede PostgreSQL veritabanı kullanmaktadır.
 
 # Başlarken
 
@@ -15,7 +15,7 @@ Ayrıca, projenin çalışması için gerekli olan diğer bağımlılıklar, pro
 # Kurulum
 
 1. Bu projeyi GitHub'dan indirin veya kopyalayın.
-2. appsettings.json dosyasında PostgreSQL ve RabbitMQ ayarlarınızı yapın.
+2. appsettings.json dosyasında PostgreSQL ayarlarınızı yapın.
 3. Komut satırından proje ana dizinine gidin.
 4. Projenin bağımlılıklarını yüklemek için aşağıdaki komutu çalıştırın:
 dotnet restore
@@ -41,7 +41,7 @@ Bu proje, aşağıdaki teknolojileri kullanarak geliştirilmiştir:
 
 # Projenin Yapısı
 
-Bu projede, farklı mikroservisler bir araya getirilerek oluşturulmuştur. BookService , kitap verilerini saklamakla sorumludur. AccountService , kullanıcı verilerini saklamakla sorumludur. ApiGateway, istekleri yönlendirerek ilgili servislere gönderir. Ayrıca, veri doğrulama işlemleri de burada yapılmaktadır.
+BookService , kitap verilerini saklamakla sorumludur. AccountService , kullanıcı verilerini saklamakla sorumludur. ApiGateway, istekleri yönlendirerek ilgili servislere gönderir. Ayrıca, veri doğrulama işlemleri de burada yapılmaktadır.
 
 Proje, Generic Repository Pattern kullanarak veri işlemlerini gerçekleştirir. Ayrıca, Dependency Injection kullanarak bağımlılıkları yönetir.
 
@@ -55,5 +55,5 @@ Bu proje, xUnit test kütüphanesi kullanılarak test edilmiştir. Testler, veri
 Bu projeye katkıda bulunmak isterseniz, lütfen pull request gönderin veya issue oluşturun. İletişim bilgilerim aşağıdadır.
 
 # İletişim
-E-posta: nurullahgundogdu02@gmail.com
+E-posta: nurullahgundogdu02@hotmail.com
 
